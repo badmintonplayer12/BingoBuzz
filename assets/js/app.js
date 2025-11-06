@@ -151,6 +151,10 @@ function updateButtonColor() {
   document.documentElement.style.setProperty("--btn-color-mid", `hsl(${(hue + 20) % 360}, ${sat}%, ${light}%)`);
   document.documentElement.style.setProperty("--btn-color-end", `hsl(${(hue + 40) % 360}, ${sat}%, ${light - 10}%)`);
 
+  document.documentElement.style.setProperty("--btn-active-glow", `hsla(${hue}, 90%, 70%, 0.9)`);
+  document.documentElement.style.setProperty("--btn-idle-glow", `hsla(${hue}, 85%, 65%, 0.55)`);
+  document.documentElement.style.setProperty("--btn-fade-glow", `hsla(${(hue + 30) % 360}, 85%, 75%, 0.75)`);
+
   document.body.style.background = `radial-gradient(circle at 40% 40%, hsl(${(hue + 180) % 360}, 35%, 12%) 0%, hsl(${(hue + 200) % 360}, 40%, 5%) 100%)`;
 }
 
@@ -179,7 +183,6 @@ async function playClipResult(result) {
     await audioEngine.play(result.clip);
     playlist.markSuccess();
     persistSession({ index: playlist.cursor });
-    cycleButtonTheme();
 
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
@@ -233,6 +236,9 @@ async function playClipResult(result) {
 
 async function playNext() {
   const nextResult = playlist.next();
+  if (nextResult?.clip) {
+    updateButtonColor();
+  }
   await playClipResult(nextResult);
 }
 
