@@ -1,5 +1,5 @@
 :root {
-  --bg-start: #131329;
+  --bg-start: #1a1630;
   --bg-end: #050512;
   --btn-color-start: #ffe066;
   --btn-color-mid: #ffb347;
@@ -27,7 +27,10 @@ body {
   height: 100%;
   width: 100%;
   font-family: var(--font-stack);
-  background: radial-gradient(circle at center, var(--bg-start) 0%, var(--bg-end) 100%);
+  background: radial-gradient(circle at 40% 40%, var(--bg-start) 0%, var(--bg-end) 100%);
+  background-attachment: fixed;
+  background-size: 200% 200%;
+  animation: bg-shift 18s ease-in-out infinite alternate;
   color: #fff;
   display: grid;
   place-items: center;
@@ -56,8 +59,8 @@ body {
   transition:
     transform 200ms ease,
     box-shadow 260ms ease,
-    filter 260ms ease;
-  animation: breathe 3.6s ease-in-out infinite;
+    filter 260ms ease,
+    background 1200ms ease;
   display: grid;
   place-items: center;
 }
@@ -171,20 +174,6 @@ body {
   text-align: center;
 }
 
-@keyframes breathe {
-  0%,
-  100% {
-    box-shadow:
-      0 0 30px var(--btn-idle-glow),
-      inset 0 0 36px rgba(255, 255, 255, 0.35);
-  }
-  50% {
-    box-shadow:
-      0 0 70px rgba(255, 235, 120, 0.8),
-      inset 0 0 42px rgba(255, 255, 255, 0.45);
-  }
-}
-
 @keyframes pulse-playing {
   0%,
   100% {
@@ -210,6 +199,18 @@ body {
     box-shadow:
       0 0 95px rgba(140, 210, 255, 0.95),
       inset 0 0 60px rgba(200, 240, 255, 0.7);
+  }
+}
+
+@keyframes bg-shift {
+  0% {
+    background-position: 30% 30%;
+  }
+  50% {
+    background-position: 70% 70%;
+  }
+  100% {
+    background-position: 50% 50%;
   }
 }
 

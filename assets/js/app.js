@@ -27,6 +27,7 @@ const storage = createStorage({ ttl: SESSION_TTL_MS });
 let manifestRef = null;
 let sessionRef = null;
 const disposables = [];
+let hueOffset = Math.random() * 360;
 
 function persistSession({ index, order } = {}) {
   const snapshot = playlist.snapshot();
@@ -135,6 +136,24 @@ function updateUi({
   }
 }
 
+function nextHue() {
+  const goldenAngle = 137.508;
+  hueOffset = (hueOffset + goldenAngle) % 360;
+  return hueOffset;
+}
+
+function updateButtonColor() {
+  const hue = nextHue();
+  const sat = 80 + Math.random() * 10;
+  const light = 45 + Math.random() * 10;
+
+  document.documentElement.style.setProperty("--btn-color-start", `hsl(${hue}, ${sat}%, ${light + 15}%)`);
+  document.documentElement.style.setProperty("--btn-color-mid", `hsl(${(hue + 20) % 360}, ${sat}%, ${light}%)`);
+  document.documentElement.style.setProperty("--btn-color-end", `hsl(${(hue + 40) % 360}, ${sat}%, ${light - 10}%)`);
+
+  document.body.style.background = `radial-gradient(circle at 40% 40%, hsl(${(hue + 180) % 360}, 35%, 12%) 0%, hsl(${(hue + 200) % 360}, 40%, 5%) 100%)`;
+}
+
 async function playClipResult(result) {
   if (!result || !result.clip) {
     updateUi({
@@ -160,6 +179,7 @@ async function playClipResult(result) {
     await audioEngine.play(result.clip);
     playlist.markSuccess();
     persistSession({ index: playlist.cursor });
+    cycleButtonTheme();
 
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
