@@ -103,8 +103,11 @@ function updateUi({
   buttonState,
   showReset,
 }) {
-  if (typeof label === "string" && elements.actionLabel) {
-    elements.actionLabel.textContent = label;
+  if (typeof label === "string") {
+    if (elements.actionLabel) {
+      elements.actionLabel.textContent = label;
+    }
+    // Always update aria-label even if actionLabel element doesn't exist
     elements.actionButton?.setAttribute("aria-label", label);
   }
   if (typeof actionDisabled === "boolean" && elements.actionButton) {
@@ -134,6 +137,18 @@ function updateUi({
       elements.actionButton.classList.add("is-fading");
     }
   }
+
+  if (typeof buttonState === "string" && typeof document !== "undefined") {
+    if (buttonState === "playing") {
+      document.body.classList.add("-playing");
+      document.body.classList.remove("-fading");
+    } else if (buttonState === "fading") {
+      document.body.classList.add("-fading");
+      document.body.classList.remove("-playing");
+    } else {
+      document.body.classList.remove("-playing", "-fading");
+    }
+  }
 }
 
 function nextHue() {
@@ -147,6 +162,7 @@ function updateButtonColor() {
   const sat = 80 + Math.random() * 10;
   const light = 45 + Math.random() * 10;
 
+  document.documentElement.style.setProperty("--theme-hue", String(hue));
   document.documentElement.style.setProperty("--btn-color-start", `hsl(${hue}, ${sat}%, ${light + 15}%)`);
   document.documentElement.style.setProperty("--btn-color-mid", `hsl(${(hue + 20) % 360}, ${sat}%, ${light}%)`);
   document.documentElement.style.setProperty("--btn-color-end", `hsl(${(hue + 40) % 360}, ${sat}%, ${light - 10}%)`);
