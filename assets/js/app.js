@@ -164,6 +164,7 @@ function updateButtonColor() {
   const light = 45 + Math.random() * 10;
 
   document.documentElement.style.setProperty("--theme-hue", String(hue));
+  document.documentElement.style.setProperty("--bg-tint-hue", String((hue + 200) % 360));
   document.documentElement.style.setProperty("--btn-color-start", `hsl(${hue}, ${sat}%, ${light + 15}%)`);
   document.documentElement.style.setProperty("--btn-color-mid", `hsl(${(hue + 20) % 360}, ${sat}%, ${light}%)`);
   document.documentElement.style.setProperty("--btn-color-end", `hsl(${(hue + 40) % 360}, ${sat}%, ${light - 10}%)`);
@@ -172,7 +173,6 @@ function updateButtonColor() {
   document.documentElement.style.setProperty("--btn-idle-glow", `hsla(${hue}, 85%, 65%, 0.55)`);
   document.documentElement.style.setProperty("--btn-fade-glow", `hsla(${(hue + 30) % 360}, 85%, 75%, 0.75)`);
 
-  document.body.style.background = `radial-gradient(circle at 40% 40%, hsl(${(hue + 180) % 360}, 35%, 12%) 0%, hsl(${(hue + 200) % 360}, 40%, 5%) 100%)`;
 }
 
 async function playClipResult(result) {
@@ -321,41 +321,42 @@ function bindUi() {
     if (!event || !elements.actionButton || !elements.screen) {
       return;
     }
-    
+
     const target = event.target;
-    
-    // Ignore clicks on the button itself or inside the button
+
     if (elements.actionButton === target || elements.actionButton.contains(target)) {
       return;
     }
-    
-    // Ignore clicks on reset button
+
     if (elements.resetBtn && (elements.resetBtn === target || elements.resetBtn.contains(target))) {
       return;
     }
-    
-    // Only toggle fullscreen if click is within the screen area
-    // Check if target is screen or a descendant of screen
+
     if (elements.screen === target || elements.screen.contains(target)) {
-      toggleFullscreen();
+      toggleFullscreen({ userInitiated: true });
     }
   });
 }
 
-function toggleFullscreen() {
+function toggleFullscreen({ userInitiated = false } = {}) {
   if (typeof document === "undefined") {
     return;
   }
   if (!document.fullscreenEnabled) {
     return;
   }
-  if (!document.fullscreenElement) {
-    const target = document.documentElement;
-    if (target.requestFullscreen) {
-      target.requestFullscreen().catch(() => {});
+  if (document.fullscreenElement) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
     }
-  } else if (document.exitFullscreen) {
-    document.exitFullscreen().catch(() => {});
+    return;
+  }
+  if (!userInitiated) {
+    return;
+  }
+  const target = document.documentElement;
+  if (target.requestFullscreen) {
+    target.requestFullscreen().catch(() => {});
   }
 }
 
