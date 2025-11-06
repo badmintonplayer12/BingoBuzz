@@ -12,6 +12,7 @@ import { loadManifest } from "./manifest.js";
 const elements = {
   actionButton: document.querySelector("#action-button"),
   actionLabel: document.querySelector("#action-button .big-btn__label"),
+  screen: document.querySelector(".big-btn-screen"),
   statusLine: document.querySelector("#status-line"),
   resetBanner: document.querySelector(".reset-banner"),
   resetBtn: document.querySelector("#reset-session"),
@@ -313,6 +314,49 @@ function bindUi() {
   elements.resetBtn?.addEventListener("click", () => {
     resetSession();
   });
+
+  // Use document-level click handler to catch clicks outside the button
+  // This ensures we catch clicks even when they bubble up from child elements
+  document.addEventListener("click", (event) => {
+    if (!event || !elements.actionButton || !elements.screen) {
+      return;
+    }
+    
+    const target = event.target;
+    
+    // Ignore clicks on the button itself or inside the button
+    if (elements.actionButton === target || elements.actionButton.contains(target)) {
+      return;
+    }
+    
+    // Ignore clicks on reset button
+    if (elements.resetBtn && (elements.resetBtn === target || elements.resetBtn.contains(target))) {
+      return;
+    }
+    
+    // Only toggle fullscreen if click is within the screen area
+    // Check if target is screen or a descendant of screen
+    if (elements.screen === target || elements.screen.contains(target)) {
+      toggleFullscreen();
+    }
+  });
+}
+
+function toggleFullscreen() {
+  if (typeof document === "undefined") {
+    return;
+  }
+  if (!document.fullscreenEnabled) {
+    return;
+  }
+  if (!document.fullscreenElement) {
+    const target = document.documentElement;
+    if (target.requestFullscreen) {
+      target.requestFullscreen().catch(() => {});
+    }
+  } else if (document.exitFullscreen) {
+    document.exitFullscreen().catch(() => {});
+  }
 }
 
 if (typeof window !== "undefined") {
