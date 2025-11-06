@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BingoBuzz</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <meta name="description" content="BingoBuzz – spill neste festlige bingolyd med et klikk.">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <h1 class="app-title">BingoBuzz</h1>
+        <p class="app-tagline">Når bingoen treffer, lar vi lydene feire.</p>
+      </header>
+
+      <section class="controls" aria-live="polite">
+        <button id="play-next" class="btn btn-primary" type="button">
+          Start neste
+        </button>
+        <button
+          id="fade-out"
+          class="btn btn-secondary"
+          type="button"
+          aria-disabled="true"
+          disabled
+        >
+          Fade ut
+        </button>
+        <p id="status-line" class="status-line" role="status">
+          Klar &middot; Ingen gjentakelser i denne økta.
+        </p>
+      </section>
+
+      <section class="reset-banner" hidden>
+        <p>Alt spilt i denne økta &middot; <button id="reset-session" type="button" class="link-button">Start på nytt</button></p>
+      </section>
+    </main>
+
+    <noscript>
+      <p class="noscript-warning">
+        BingoBuzz trenger JavaScript for å spille av festlige lyder. Aktiver JavaScript og last siden på nytt.
+      </p>
+    </noscript>
+
+    <script type="module" src="assets/js/app.js"></script>
+  </body>
+</html>

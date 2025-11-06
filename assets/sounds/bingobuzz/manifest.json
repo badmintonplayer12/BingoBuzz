@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "ttlHours": 3,
+  "formats": ["webm", "mp3"],
+  "basePath": "assets/sounds/bingobuzz",
+  "normalization": {
+    "targetLufs": -14,
+    "peakDbtp": -1
+  },
+  "manifestEtag": "dev-seed",
+  "files": [
+    {
+      "id": "sample_celebration",
+      "src": "sample_celebration",
+      "category": "fanfare",
+      "gain": 0,
+      "durationHintMs": 2000,
+      "etag": "sample-v1"
+    }
+  ]
+}
