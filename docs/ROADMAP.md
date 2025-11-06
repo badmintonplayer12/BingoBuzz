@@ -54,6 +54,55 @@
   - Accessibility: keyboard activation, focus management, `aria-live` updates.
 - (Future) Add lightweight unit tests for `playlist` logic and storage TTL math via simple test harness.
 
+### Browser QA Playbook
+- **Forberedelser**
+  - Åpne developer tools (`F12`), behold `Console` og `Application > Storage > Local Storage`.
+  - Tøm `localStorage` (`localStorage.clear()`) før første test for ren tilstand.
+  - Bekreft at manifestet laster (ingen røde feil i konsollen).
+  - Debug-verktøy er tilgjengelig via `window.bingoBuzzDebug`: `bingoBuzzDebug.getState()`, `bingoBuzzDebug.playlist.snapshot()`, etc.
+
+- **Standard flyt**
+  - Trykk “Start neste”; forvent at lyd starter, status viser `Spiller #1 av N …`, “Fade ut” aktiveres.
+  - Vent til avspillingen stopper av seg selv; status skal vise `Klar · #2 av N gjenstår`, “Start neste” aktiveres.
+  - Gjenta til minst tre ulike klipp er spilt, og sjekk at `localStorage`-feltene (`bbz:v1:*`) oppdateres.
+
+- **Fade-test**
+  - Start et klipp og trykk “Fade ut”. Lyd skal fade innen ~1.2 s, status `Fader ut …` → `Klar …`.
+  - Kontroller at `Fade ut` blir deaktivert umiddelbart, og at `Start neste` reaktiveres etter fade.
+
+- **Busy-guard**
+  - Mens et klipp spiller, spam “Start neste”. Knappen skal pulsere/klassifiseres “is-busy”, ingen overlappet lyd.
+  - Trykk “Fade ut” flere ganger under fade; ekstra klikk skal ignoreres uten feil i konsollen.
+
+- **Full syklus + auto-reset**
+  - Spill gjennom alle klipp (evt. i testmodus: kjør `bingoBuzzDebug.resetPlaylist()` i konsollen og bruk `bingoBuzzDebug.playlist.snapshot()` for fremdrift).
+  - Når siste klipp er ferdig, status skal vise `Alt spilt i denne økta · Start på nytt`, "Start neste"/"Fade ut" skal være deaktivert.
+  - Klikk "Start på nytt"; bekreft at ny rekkefølge genereres og `localStorage` får nytt `createdAt`.
+  - Verifiser med `bingoBuzzDebug.getState()` for full oversikt over tilstand.
+
+- **TTL / fresh flag**
+  - I devtools, sett `bbz:v1:createdAt` til en verdi >3 timer tilbake (`Date.now() - 3.5*60*60*1000`).
+  - Reload siden, trykk “Start neste”; forvent at køen reshuffles (sjekk `playlistIds` endres) og status er “Klar …”.
+  - Test `?fresh=1` ved å laste `index.html?fresh=1`; bekreft automatisk reset.
+
+- **Feilhåndtering / skip**
+  - Midlertidig gi én fil feil navn (f.eks. endre i filsystemet til `*.bak`) og reload.
+  - Trykk “Start neste”; når filen nås, status skal vise “Hoppet over en fil · prøver neste …” og neste klipp skal starte.
+  - Revert filnavnet etter verifikasjon.
+
+- **Tilgjengelighet**
+  - Naviger med `Tab` mellom knappene; fokusring skal være tydelig.
+  - Bruk `Space`/`Enter` for å aktivere “Start neste” og “Fade ut”.
+  - I Console: `document.querySelector('#status-line').getAttribute('role')` → skal være `status`; observer `aria-live` ved avspillingsendringer.
+
+- **Persistens på tvers av reload**
+  - Spill ett klipp, reload siden (uten å cleare storage); status skal vise neste indeks (`#2 av N gjenstår`).
+  - Bekreft at “Fade ut” er deaktivert etter reload og at “Start neste” starter neste klipp uten repetisjon.
+
+- **Mobilrespons (valgfritt)**
+  - Aktiver device toolbar i devtools (f.eks. iPhone 12). Knappene skal fortsatt være fullt brede, fokus og status lesbare.
+  - Test tapping for play/fade; se etter utilsiktet zoom eller layout-skift.
+
 ## 8. Future Enhancements (Backlog)
 - Volume slider and fade-length options persisted via storage.
 - Offline caching with Service Worker and versioned assets.

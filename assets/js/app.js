@@ -339,6 +339,54 @@ const run = () => {
   });
 };
 
+// Expose debugging helpers for QA/testing (as referenced in ROADMAP.md)
+if (typeof window !== "undefined") {
+  window.bingoBuzzDebug = {
+    get playlist() {
+      return playlist;
+    },
+    get audioEngine() {
+      return audioEngine;
+    },
+    get storage() {
+      return storage;
+    },
+    get manifest() {
+      return manifestRef;
+    },
+    get session() {
+      return sessionRef;
+    },
+    // Helper to reset playlist manually (useful for testing)
+    resetPlaylist() {
+      resetSession();
+      console.log("Playlist reset. Snapshot:", playlist.snapshot());
+    },
+    // Helper to check current state
+    getState() {
+      return {
+        playlist: playlist.snapshot(),
+        audioEngine: {
+          state: audioEngine.state,
+          currentClip: audioEngine.currentClip,
+          supportsWebAudio: audioEngine.supportsWebAudio,
+        },
+        storage: {
+          session: storage.loadSession(),
+          hasFreshFlag: storage.hasFreshFlag,
+          ttl: storage.ttl,
+        },
+        manifest: manifestRef,
+      };
+    },
+  };
+  console.info(
+    "BingoBuzz debug helpers available via window.bingoBuzzDebug",
+    "\nTry: bingoBuzzDebug.getState()",
+    "\nOr: bingoBuzzDebug.playlist.snapshot()",
+  );
+}
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", run, { once: true });
 } else {
