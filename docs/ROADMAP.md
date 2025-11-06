@@ -34,7 +34,7 @@
 ## 5. App Orchestration
 - In `app.js`, bootstrap flow:
   - Fetch manifest, check `storage.shouldReset`, hydrate playlist/audio, restore UI state.
-  - Bind button handlers: `Start neste` → guarded `playlist.next` + `audio.play`; `Fade ut` → `audio.fadeOut`.
+- Bind hovedknappen til en togglet flow: idle trykk → `playlist.next` + `audio.play`, playing trykk → `audio.fadeOut`.
   - Reflect state transitions in DOM (button `disabled`/`aria-disabled`, busy animations, status text).
   - Handle automatic reset when playlist complete (show “Start på nytt”), and manual reset action.
   - Integrate error handling: on playback failure call `playlist.skipFailed`, retry until `MAX_CONSECUTIVE_SKIPS`.
@@ -62,22 +62,22 @@
   - Debug-verktøy er tilgjengelig via `window.bingoBuzzDebug`: `bingoBuzzDebug.getState()`, `bingoBuzzDebug.playlist.snapshot()`, etc.
 
 - **Standard flyt**
-  - Trykk “Start neste”; forvent at lyd starter, status viser `Spiller #1 av N …`, “Fade ut” aktiveres.
-  - Vent til avspillingen stopper av seg selv; status skal vise `Klar · #2 av N gjenstår`, “Start neste” aktiveres.
-  - Gjenta til minst tre ulike klipp er spilt, og sjekk at `localStorage`-feltene (`bbz:v1:*`) oppdateres.
+  - Første trykk på hovedknappen (`Start neste`) skal starte lyd og oppdatere label til `Fade ut`.
+  - Vent til avspillingen stopper av seg selv; knappen skal gå tilbake til `Start neste` og status vise `Klar · #2 av N gjenstår`.
+  - Gjenta for minst tre klipp, og sjekk at `localStorage`-feltene (`bbz:v1:*`) oppdateres etter hvert spor.
 
 - **Fade-test**
-  - Start et klipp og trykk “Fade ut”. Lyd skal fade innen ~1.2 s, status `Fader ut …` → `Klar …`.
-  - Kontroller at `Fade ut` blir deaktivert umiddelbart, og at `Start neste` reaktiveres etter fade.
+  - Start et klipp og trykk knappen igjen (den viser `Fade ut`). Lyd skal fade innen ~1.2 s og status gå `Fader ut …` → `Klar …`.
+  - Etter fade skal knappen automatisk vise `Start neste` og være klar for neste trykk.
 
 - **Busy-guard**
-  - Mens et klipp spiller, spam “Start neste”. Knappen skal pulsere/klassifiseres “is-busy”, ingen overlappet lyd.
-  - Trykk “Fade ut” flere ganger under fade; ekstra klikk skal ignoreres uten feil i konsollen.
+  - Klikk knappen gjentatte ganger mens et klipp spiller; første ekstra trykk skal trigge fade, senere klikk under fade skal ignoreres (kort `is-busy`-puls, ingen feil).
+  - Etter fade, bekreft at neste trykk starter neste klipp umiddelbart.
 
 - **Full syklus + auto-reset**
   - Spill gjennom alle klipp (evt. i testmodus: kjør `bingoBuzzDebug.resetPlaylist()` i konsollen og bruk `bingoBuzzDebug.playlist.snapshot()` for fremdrift).
-  - Når siste klipp er ferdig, status skal vise `Alt spilt i denne økta · Start på nytt`, "Start neste"/"Fade ut" skal være deaktivert.
-  - Klikk "Start på nytt"; bekreft at ny rekkefølge genereres og `localStorage` får nytt `createdAt`.
+  - Når siste klipp er ferdig, status skal vise `Alt spilt i denne økta · Start på nytt`, og knappen skal vise `Alt spilt` (deaktivert).
+  - Klikk "Start på nytt"; bekreft at knappen viser `Start neste`, ny rekkefølge genereres og `localStorage` får nytt `createdAt`.
   - Verifiser med `bingoBuzzDebug.getState()` for full oversikt over tilstand.
 
 - **TTL / fresh flag**
@@ -91,13 +91,13 @@
   - Revert filnavnet etter verifikasjon.
 
 - **Tilgjengelighet**
-  - Naviger med `Tab` mellom knappene; fokusring skal være tydelig.
-  - Bruk `Space`/`Enter` for å aktivere “Start neste” og “Fade ut”.
+  - Naviger med `Tab` til hovedknappen; fokusring skal være tydelig.
+  - Bruk `Space`/`Enter`; første aktivering starter lyd, andre aktiverer fade.
   - I Console: `document.querySelector('#status-line').getAttribute('role')` → skal være `status`; observer `aria-live` ved avspillingsendringer.
 
 - **Persistens på tvers av reload**
   - Spill ett klipp, reload siden (uten å cleare storage); status skal vise neste indeks (`#2 av N gjenstår`).
-  - Bekreft at “Fade ut” er deaktivert etter reload og at “Start neste” starter neste klipp uten repetisjon.
+  - Bekreft at knappen viser `Start neste` etter reload og starter neste klipp uten repetisjon.
 
 - **Mobilrespons (valgfritt)**
   - Aktiver device toolbar i devtools (f.eks. iPhone 12). Knappene skal fortsatt være fullt brede, fokus og status lesbare.

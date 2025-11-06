@@ -8,24 +8,14 @@
     <meta name="description" content="BingoBuzz – spill neste festlige bingolyd med et klikk.">
   </head>
   <body>
-    <main class="app-shell">
-      <header class="app-header">
-        <h1 class="app-title">BingoBuzz</h1>
-        <p class="app-tagline">Når bingoen treffer, lar vi lydene feire.</p>
-      </header>
+    <main class="big-btn-screen" aria-live="polite">
+      <button id="action-button" class="big-btn" type="button" aria-label="Start neste"></button>
 
-      <section class="controls" aria-live="polite">
-        <button id="action-button" class="btn btn-primary" type="button">
-          Start neste
+      <div class="reset-banner" hidden>
+        <button id="reset-session" type="button" class="reset-chip">
+          Alt spilt · Start på nytt
         </button>
-        <p id="status-line" class="status-line" role="status">
-          Klar &middot; Ingen gjentakelser i denne økta.
-        </p>
-      </section>
-
-      <section class="reset-banner" hidden>
-        <p>Alt spilt i denne økta &middot; <button id="reset-session" type="button" class="link-button">Start på nytt</button></p>
-      </section>
+      </div>
     </main>
 
     <noscript>

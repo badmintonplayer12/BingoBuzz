@@ -10,14 +10,14 @@ import { loadManifest } from "./manifest.js";
  */
 
 const elements = {
-  playNext: document.querySelector("#play-next"),
-  fadeOut: document.querySelector("#fade-out"),
+  actionButton: document.querySelector("#action-button"),
+  actionLabel: document.querySelector("#action-button .big-btn__label"),
   statusLine: document.querySelector("#status-line"),
   resetBanner: document.querySelector(".reset-banner"),
   resetBtn: document.querySelector("#reset-session"),
 };
 
-if (!elements.playNext || !elements.fadeOut || !elements.statusLine) {
+if (!elements.actionButton || !elements.statusLine) {
   console.warn("BingoBuzz UI elements missing; check markup.");
 }
 
@@ -61,8 +61,10 @@ function resetSession() {
   storage.saveSession(sessionRef);
   updateUi({
     statusText: `Klar · #${playlist.cursor + 1} av ${playlist.size} gjenstår`,
-    playDisabled: false,
-    fadeDisabled: true,
+    actionLabel: "Start neste",
+    actionDisabled: false,
+    actionBusy: false,
+    buttonState: "idle",
     showReset: false,
   });
 }
@@ -74,43 +76,62 @@ function handlePlaybackEnded({ reason } = {}) {
   if (playlist.isComplete()) {
     updateUi({
       statusText: "Alt spilt i denne økta · Start på nytt",
-      playDisabled: true,
-      fadeDisabled: true,
+      actionLabel: "Alt spilt",
+      actionDisabled: true,
+      actionBusy: false,
+      buttonState: "idle",
       showReset: true,
     });
   } else {
     updateUi({
       statusText: `Klar · #${playlist.cursor + 1} av ${playlist.size} gjenstår`,
-      playDisabled: false,
-      fadeDisabled: true,
+      actionLabel: "Start neste",
+      actionDisabled: false,
+      actionBusy: false,
+      buttonState: "idle",
       showReset: false,
     });
   }
 }
 
-function updateUi({ statusText, playDisabled, fadeDisabled, showReset }) {
-  if (typeof playDisabled === "boolean" && elements.playNext) {
-    elements.playNext.disabled = playDisabled;
-    if (playDisabled) {
-      elements.playNext.setAttribute("aria-busy", "true");
+function updateUi({
+  statusText,
+  actionLabel: label,
+  actionDisabled,
+  actionBusy,
+  buttonState,
+  showReset,
+}) {
+  if (typeof label === "string" && elements.actionLabel) {
+    elements.actionLabel.textContent = label;
+    elements.actionButton?.setAttribute("aria-label", label);
+  }
+  if (typeof actionDisabled === "boolean" && elements.actionButton) {
+    elements.actionButton.disabled = actionDisabled;
+  }
+  if (typeof actionBusy === "boolean" && elements.actionButton) {
+    if (actionBusy) {
+      elements.actionButton.setAttribute("aria-busy", "true");
     } else {
-      elements.playNext.removeAttribute("aria-busy");
-      elements.playNext.classList.remove("is-busy");
+      elements.actionButton.removeAttribute("aria-busy");
+      elements.actionButton.classList.remove("is-busy");
     }
   }
-  if (typeof fadeDisabled === "boolean" && elements.fadeOut) {
-    elements.fadeOut.disabled = fadeDisabled;
-    if (fadeDisabled) {
-      elements.fadeOut.setAttribute("aria-disabled", "true");
-    } else {
-      elements.fadeOut.removeAttribute("aria-disabled");
-    }
-  }
+
   if (typeof statusText === "string" && elements.statusLine) {
     elements.statusLine.textContent = statusText;
   }
   if (typeof showReset === "boolean" && elements.resetBanner) {
     elements.resetBanner.hidden = !showReset;
+  }
+
+  if (elements.actionButton) {
+    elements.actionButton.classList.remove("is-playing", "is-fading");
+    if (buttonState === "playing") {
+      elements.actionButton.classList.add("is-playing");
+    } else if (buttonState === "fading") {
+      elements.actionButton.classList.add("is-fading");
+    }
   }
 }
 
@@ -118,8 +139,10 @@ async function playClipResult(result) {
   if (!result || !result.clip) {
     updateUi({
       statusText: "Alt spilt i denne økta · Start på nytt",
-      playDisabled: true,
-      fadeDisabled: true,
+      actionLabel: "Alt spilt",
+      actionDisabled: true,
+      actionBusy: false,
+      buttonState: "idle",
       showReset: true,
     });
     return;
@@ -127,8 +150,10 @@ async function playClipResult(result) {
   try {
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
-      playDisabled: true,
-      fadeDisabled: false,
+      actionLabel: "Fade ut",
+      actionDisabled: false,
+      actionBusy: false,
+      buttonState: "playing",
       showReset: false,
     });
 
@@ -138,8 +163,10 @@ async function playClipResult(result) {
 
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
-      playDisabled: true,
-      fadeDisabled: false,
+      actionLabel: "Fade ut",
+      actionDisabled: false,
+      actionBusy: false,
+      buttonState: "playing",
     });
   } catch (error) {
     console.error("playClipResult failed", error);
@@ -147,8 +174,10 @@ async function playClipResult(result) {
     if (error?.name === "NotAllowedError") {
       updateUi({
         statusText: "Tillat avspilling i nettleseren og prøv igjen.",
-        playDisabled: false,
-        fadeDisabled: true,
+        actionLabel: "Start neste",
+        actionDisabled: false,
+        actionBusy: false,
+        buttonState: "idle",
         showReset: false,
       });
       return;
@@ -162,16 +191,20 @@ async function playClipResult(result) {
       });
       updateUi({
         statusText: "Hoppet over en fil · prøver neste …",
-        playDisabled: false,
-        fadeDisabled: true,
+        actionLabel: "Start neste",
+        actionDisabled: false,
+        actionBusy: false,
+        buttonState: "idle",
         showReset: false,
       });
       await playClipResult(skipResult);
     } else {
       updateUi({
         statusText: "Kunne ikke spille av klippene · Start på nytt",
-        playDisabled: true,
-        fadeDisabled: true,
+        actionLabel: "Alt spilt",
+        actionDisabled: true,
+        actionBusy: false,
+        buttonState: "idle",
         showReset: true,
       });
     }
@@ -179,57 +212,61 @@ async function playClipResult(result) {
 }
 
 async function playNext() {
-  if (audioEngine.state === "playing" || audioEngine.state === "fading") {
-    elements.playNext?.classList.add("is-busy");
-    setTimeout(() => elements.playNext?.classList.remove("is-busy"), 320);
+  const nextResult = playlist.next();
+  await playClipResult(nextResult);
+}
+
+async function handleActionClick() {
+  if (audioEngine.state === "playing") {
+    updateUi({
+      statusText: "Fader ut …",
+      actionLabel: "Fader ut …",
+      actionDisabled: true,
+      actionBusy: true,
+      buttonState: "fading",
+      showReset: false,
+    });
+    try {
+      await audioEngine.fadeOut(STOP_FADE_MS);
+    } catch (error) {
+      console.error("Fade out failed", error);
+      updateUi({
+        statusText: "Fade feilet · prøv igjen",
+        actionLabel: "Start neste",
+        actionDisabled: false,
+        actionBusy: false,
+        buttonState: "idle",
+      });
+    }
     return;
   }
 
-  const nextResult = playlist.next();
-  await playClipResult(nextResult);
+  if (audioEngine.state === "fading") {
+    updateUi({ actionBusy: true, buttonState: "fading" });
+    return;
+  }
+
+  if (playlist.isComplete()) {
+    updateUi({
+      statusText: "Alt spilt i denne økta · Start på nytt",
+      actionLabel: "Alt spilt",
+      actionDisabled: true,
+      actionBusy: false,
+      buttonState: "idle",
+      showReset: true,
+    });
+    return;
+  }
+
+  updateUi({ actionBusy: true, buttonState: "playing" });
+  await playNext();
 }
 
 function bindUi() {
   disposables.push(audioEngine.on("ended", handlePlaybackEnded));
 
-  elements.playNext?.addEventListener("click", () => {
-    void playNext();
-  });
-  elements.fadeOut?.addEventListener("click", async () => {
-    if (audioEngine.state !== "playing") {
-      return;
-    }
-    updateUi({
-      statusText: "Fader ut …",
-      playDisabled: true,
-      fadeDisabled: true,
-      showReset: false,
-    });
-    try {
-      await audioEngine.fadeOut(STOP_FADE_MS);
-      if (playlist.isComplete()) {
-        updateUi({
-          statusText: "Alt spilt i denne økta · Start på nytt",
-          playDisabled: true,
-          fadeDisabled: true,
-          showReset: true,
-        });
-      } else {
-        updateUi({
-          statusText: `Klar · #${playlist.cursor + 1} av ${playlist.size} gjenstår`,
-          playDisabled: false,
-          fadeDisabled: true,
-          showReset: false,
-        });
-      }
-    } catch (error) {
-      console.error("Fade out failed", error);
-      updateUi({
-        statusText: "Fade feilet · prøv igjen",
-        playDisabled: false,
-        fadeDisabled: true,
-      });
-    }
+  elements.actionButton?.addEventListener("click", () => {
+    void handleActionClick();
   });
   elements.resetBtn?.addEventListener("click", () => {
     resetSession();
@@ -237,6 +274,24 @@ function bindUi() {
 }
 
 if (typeof window !== "undefined") {
+  window.bingoBuzzDebug = {
+    playlist,
+    audioEngine,
+    storage,
+    getState() {
+      return {
+        audioState: audioEngine.state,
+        manifest: manifestRef,
+        playlist: playlist.snapshot(),
+        session: sessionRef,
+      };
+    },
+    resetPlaylist() {
+      resetSession();
+      return playlist.snapshot();
+    },
+  };
+
   window.addEventListener("beforeunload", () => {
     disposables.splice(0).forEach((dispose) => {
       try {
@@ -319,15 +374,19 @@ async function bootstrap() {
   if (playlist.size === 0) {
     updateUi({
       statusText: "Ingen klipp tilgjengelig · sjekk manifestet",
-      playDisabled: true,
-      fadeDisabled: true,
+      actionLabel: "Ingen klipp",
+      actionDisabled: true,
+      actionBusy: false,
+      buttonState: "idle",
       showReset: false,
     });
   } else {
     updateUi({
       statusText: `Klar · #${playlist.cursor + 1} av ${playlist.size} gjenstår`,
-      playDisabled: false,
-      fadeDisabled: true,
+      actionLabel: "Start neste",
+      actionDisabled: false,
+      actionBusy: false,
+      buttonState: "idle",
       showReset: false,
     });
   }
