@@ -56,6 +56,7 @@ let libraryStatusResetTimer = null;
 let favoritesPersistenceAvailable = true;
 let prefsPersistenceAvailable = true;
 let regenerateInFlight = false;
+let hotspotSeen = false;
 
 function humanizeClipId(id) {
   return typeof id === "string" ? id.replace(/_/g, " ") : "";
@@ -222,6 +223,7 @@ function openLibrary() {
   lastFocusedElement = document.activeElement;
   elements.libraryOverlay.hidden = false;
   libraryState.isOpen = true;
+  markHotspotSeen();
   renderLibraryList();
   updateLibraryStatus();
   if (libraryStatusResetTimer) {
@@ -457,6 +459,21 @@ function persistLibraryPrefs() {
   }
 }
 
+function updateHotspotHighlight() {
+  if (elements.libraryHotspot) {
+    elements.libraryHotspot.classList.toggle("needs-highlight", !hotspotSeen);
+  }
+}
+
+function markHotspotSeen() {
+  if (hotspotSeen) {
+    return;
+  }
+  hotspotSeen = true;
+  updateHotspotHighlight();
+  storage.saveHotspotSeen?.(true);
+}
+
 function hydrateFavoritesAndPrefs() {
   const files = manifestRef?.files ?? [];
   const validIds = new Set(files.map((file) => file.id));
@@ -486,6 +503,8 @@ function hydrateFavoritesAndPrefs() {
   } else if (elements.favoritesToggle) {
     elements.favoritesToggle.checked = libraryState.filterFavoritesOnly;
   }
+  hotspotSeen = storage.loadHotspotSeen?.() ?? false;
+  updateHotspotHighlight();
 }
 
 function getLibraryFocusables() {

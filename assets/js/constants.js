@@ -12,6 +12,7 @@ export const STORAGE_KEYS = {
   manifestEtag: `${STORAGE_NAMESPACE}:manifestEtag`,
   favorites: `${STORAGE_NAMESPACE}:favorites`,
   prefs: `${STORAGE_NAMESPACE}:prefs`,
+  hotspotSeen: `${STORAGE_NAMESPACE}:hotspot-seen`,
 };
 
 export const MANIFEST_URL = "assets/sounds/bingobuzz/manifest.json";

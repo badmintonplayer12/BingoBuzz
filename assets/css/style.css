@@ -83,7 +83,13 @@ body::after {
   cursor: pointer;
   opacity: 0;
   z-index: 2;
-  animation: hotspot-pulse 2.5s ease-out 0.5s 1 both;
+  animation: hotspot-pulse 3.2s ease-out 0.4s 1 both;
+}
+
+.library-hotspot.needs-highlight {
+  opacity: 0.4;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  animation: none;
 }
 
 .library-overlay {
@@ -402,15 +408,19 @@ body::after {
 @keyframes hotspot-pulse {
   0% {
     opacity: 0;
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
   }
-  40% {
-    opacity: 0.5;
-    box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.15);
+  35% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 14px rgba(255, 255, 255, 0.25);
+  }
+  70% {
+    opacity: 0.4;
+    box-shadow: 0 0 0 24px rgba(255, 255, 255, 0.08);
   }
   100% {
     opacity: 0;
-    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 32px rgba(255, 255, 255, 0);
   }
 }
 

@@ -283,6 +283,32 @@ export function createStorage({ ttl }) {
     }
   }
 
+  function loadHotspotSeen() {
+    const store = getLocalStorage();
+    if (!store) {
+      return false;
+    }
+    return store.getItem(STORAGE_KEYS.hotspotSeen) === "1";
+  }
+
+  function saveHotspotSeen(seen = true) {
+    const store = getLocalStorage();
+    if (!store) {
+      return false;
+    }
+    try {
+      if (seen) {
+        store.setItem(STORAGE_KEYS.hotspotSeen, "1");
+      } else {
+        store.removeItem(STORAGE_KEYS.hotspotSeen);
+      }
+      return true;
+    } catch (error) {
+      console.warn("storage: saveHotspotSeen failed", error);
+      return false;
+    }
+  }
+
   return {
     namespace: STORAGE_NAMESPACE,
     hasFreshFlag,
@@ -295,6 +321,8 @@ export function createStorage({ ttl }) {
     saveFavorites,
     loadPrefs,
     savePrefs,
+    loadHotspotSeen,
+    saveHotspotSeen,
     get ttl() {
       return ttlMs;
     },
