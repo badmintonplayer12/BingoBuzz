@@ -84,6 +84,7 @@ body::after {
   opacity: 0;
   z-index: 2;
   animation: hotspot-pulse 3.2s ease-out 0.4s 1 both;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .library-hotspot.needs-highlight {
