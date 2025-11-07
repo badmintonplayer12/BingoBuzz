@@ -5,6 +5,9 @@ import {
 } from "./constants.js";
 
 const TRUTHY_FRESH_VALUES = new Set(["1", "true", "yes", "fresh"]);
+const DEFAULT_LIBRARY_PREFS = {
+  filterFavoritesOnly: false,
+};
 
 function getLocalStorage() {
   try {
@@ -30,6 +33,26 @@ function parseJson(value) {
 function parseIntSafe(value) {
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? null : parsed;
+}
+
+function normalizeFavoriteIds(ids) {
+  if (!Array.isArray(ids)) {
+    return [];
+  }
+  const seen = new Set();
+  const normalized = [];
+  ids.forEach((id) => {
+    if (typeof id !== "string") {
+      return;
+    }
+    const trimmed = id.trim();
+    if (!trimmed || seen.has(trimmed)) {
+      return;
+    }
+    seen.add(trimmed);
+    normalized.push(trimmed);
+  });
+  return normalized;
 }
 
 function detectFreshFlag() {
@@ -157,6 +180,109 @@ export function createStorage({ ttl }) {
     }
   }
 
+  function loadFavorites({ validIds } = {}) {
+    const store = getLocalStorage();
+    const validSet =
+      validIds instanceof Set
+        ? validIds
+        : Array.isArray(validIds)
+          ? new Set(validIds)
+          : null;
+    if (!store) {
+      return { favorites: [], persistent: false, trimmed: false };
+    }
+    const raw = store.getItem(STORAGE_KEYS.favorites);
+    if (!raw) {
+      return { favorites: [], persistent: true, trimmed: false };
+    }
+    const parsed = parseJson(raw);
+    const normalized = normalizeFavoriteIds(parsed);
+    const hadData = Boolean(raw && raw.length);
+    if (!normalized.length) {
+      store.removeItem(STORAGE_KEYS.favorites);
+      return { favorites: [], persistent: true, trimmed: hadData };
+    }
+    let filtered = normalized;
+    let trimmed = false;
+    if (validSet && validSet.size) {
+      filtered = normalized.filter((id) => validSet.has(id));
+      trimmed = filtered.length !== normalized.length;
+    }
+    if (trimmed) {
+      saveFavorites(filtered);
+    }
+    return { favorites: filtered, persistent: true, trimmed };
+  }
+
+  function saveFavorites(ids) {
+    const store = getLocalStorage();
+    if (!store) {
+      return false;
+    }
+    const normalized = normalizeFavoriteIds(ids);
+    try {
+      if (normalized.length === 0) {
+        store.removeItem(STORAGE_KEYS.favorites);
+      } else {
+        store.setItem(STORAGE_KEYS.favorites, JSON.stringify(normalized));
+      }
+      return true;
+    } catch (error) {
+      console.warn("storage: saveFavorites failed", error);
+      return false;
+    }
+  }
+
+  function loadPrefs() {
+    const store = getLocalStorage();
+    if (!store) {
+      return {
+        prefs: { ...DEFAULT_LIBRARY_PREFS },
+        persistent: false,
+      };
+    }
+    const raw = store.getItem(STORAGE_KEYS.prefs);
+    if (!raw) {
+      return {
+        prefs: { ...DEFAULT_LIBRARY_PREFS },
+        persistent: true,
+      };
+    }
+    const parsed = parseJson(raw);
+    if (!parsed || typeof parsed !== "object") {
+      store.removeItem(STORAGE_KEYS.prefs);
+      return {
+        prefs: { ...DEFAULT_LIBRARY_PREFS },
+        persistent: true,
+      };
+    }
+    return {
+      prefs: {
+        ...DEFAULT_LIBRARY_PREFS,
+        filterFavoritesOnly: Boolean(parsed.filterFavoritesOnly),
+      },
+      persistent: true,
+    };
+  }
+
+  function savePrefs(prefs) {
+    const store = getLocalStorage();
+    if (!store) {
+      return false;
+    }
+    const payload = {
+      ...DEFAULT_LIBRARY_PREFS,
+      filterFavoritesOnly: Boolean(prefs?.filterFavoritesOnly),
+    };
+    try {
+      store.setItem(STORAGE_KEYS.prefs, JSON.stringify(payload));
+      return true;
+    } catch (error) {
+      console.warn("storage: savePrefs failed", error);
+      return false;
+    }
+  }
+
   return {
     namespace: STORAGE_NAMESPACE,
     hasFreshFlag,
@@ -165,6 +291,10 @@ export function createStorage({ ttl }) {
     clearSession,
     shouldReset,
     setTtl,
+    loadFavorites,
+    saveFavorites,
+    loadPrefs,
+    savePrefs,
     get ttl() {
       return ttlMs;
     },

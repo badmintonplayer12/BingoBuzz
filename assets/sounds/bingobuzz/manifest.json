@@ -1,213 +1,215 @@
 {
   "version": 1,
   "ttlHours": 3,
-  "formats": ["mp3"],
+  "formats": [
+    "mp3"
+  ],
   "basePath": "assets/sounds/bingobuzz/NonCommerseLicense",
   "normalization": {
     "targetLufs": -14,
     "peakDbtp": -1
   },
-  "manifestEtag": "nc-pack-v1",
+  "manifestEtag": "nc-pack-v2",
   "files": [
     {
-      "id": "anei-jeg-mener-a-ja-bingo",
-      "src": "ANeiJegMenerAJaBingo",
+      "id": "anei_jeg_mener_a_ja_bingo",
+      "src": "anei_jeg_mener_a_ja_bingo",
       "category": "voice",
       "gain": 0,
       "etag": "ANeiJegMenerAJaBingo-v1"
     },
     {
-      "id": "bingo-en-opera-jingle-a",
-      "src": "BINGOEnOperajingle",
+      "id": "bingo_en_opera_jingle_a",
+      "src": "bingo_en_opera_jingle_a",
       "category": "jingle",
       "gain": 0,
       "etag": "BINGOEnOperajingle-v1"
     },
     {
-      "id": "bingo-en-opera-jingle-b",
-      "src": "BINGOEnOperajingle1",
+      "id": "bingo_en_opera_jingle_b",
+      "src": "bingo_en_opera_jingle_b",
       "category": "jingle",
       "gain": 0,
       "etag": "BINGOEnOperajingle1-v1"
     },
     {
-      "id": "bingo-baby-a",
-      "src": "BingoBaby",
+      "id": "bingo_baby_a",
+      "src": "bingo_baby_a",
       "category": "music",
       "gain": 0,
       "etag": "BingoBaby-v1"
     },
     {
-      "id": "bingo-baby-b",
-      "src": "BingoBaby1",
+      "id": "bingo_baby_b",
+      "src": "bingo_baby_b",
       "category": "music",
       "gain": 0,
       "etag": "BingoBaby1-v1"
     },
     {
-      "id": "bingo-bash-a",
-      "src": "BingoBash",
+      "id": "bingo_bash_a",
+      "src": "bingo_bash_a",
       "category": "music",
       "gain": 0,
       "etag": "BingoBash-v1"
     },
     {
-      "id": "bingo-bash-b",
-      "src": "BingoBash1",
+      "id": "bingo_bash_b",
+      "src": "bingo_bash_b",
       "category": "music",
       "gain": 0,
       "etag": "BingoBash1-v1"
     },
     {
-      "id": "bingo-beat-a",
-      "src": "BingoBeat",
+      "id": "bingo_beat_a",
+      "src": "bingo_beat_a",
       "category": "music",
       "gain": 0,
       "etag": "BingoBeat-v1"
     },
     {
-      "id": "bingo-beat-b",
-      "src": "BingoBeat1",
+      "id": "bingo_beat_b",
+      "src": "bingo_beat_b",
       "category": "music",
       "gain": 0,
       "etag": "BingoBeat1-v1"
     },
     {
-      "id": "bingo-fever-a",
-      "src": "BingoFever",
+      "id": "bingo_fever_a",
+      "src": "bingo_fever_a",
       "category": "music",
       "gain": 0,
       "etag": "BingoFever-v1"
     },
     {
-      "id": "bingo-fever-b",
-      "src": "BingoFever1",
+      "id": "bingo_fever_b",
+      "src": "bingo_fever_b",
       "category": "music",
       "gain": 0,
       "etag": "BingoFever1-v1"
     },
     {
-      "id": "bingo-jingle-a",
-      "src": "BingoJingle",
+      "id": "bingo_jingle_a",
+      "src": "bingo_jingle_a",
       "category": "jingle",
       "gain": 0,
       "etag": "BingoJingle-v1"
     },
     {
-      "id": "bingo-jingle-b",
-      "src": "BingoJingle1",
+      "id": "bingo_jingle_b",
+      "src": "bingo_jingle_b",
       "category": "jingle",
       "gain": 0,
       "etag": "BingoJingle1-v1"
     },
     {
-      "id": "bingo-jingle-c",
-      "src": "BingoJingle2",
+      "id": "bingo_jingle_c",
+      "src": "bingo_jingle_c",
       "category": "jingle",
       "gain": 0,
       "etag": "BingoJingle2-v1"
     },
     {
-      "id": "bingo-jingle-d",
-      "src": "BingoJingle3",
+      "id": "bingo_jingle_d",
+      "src": "bingo_jingle_d",
       "category": "jingle",
       "gain": 0,
       "etag": "BingoJingle3-v1"
     },
     {
-      "id": "bingo-showstopper-a",
-      "src": "BingoShowstopper",
+      "id": "bingo_showstopper_a",
+      "src": "bingo_showstopper_a",
       "category": "jingle",
       "gain": 0,
       "etag": "BingoShowstopper-v1"
     },
     {
-      "id": "bingo-showstopper-b",
-      "src": "BingoShowstopper1",
+      "id": "bingo_showstopper_b",
+      "src": "bingo_showstopper_b",
       "category": "jingle",
       "gain": 0,
       "etag": "BingoShowstopper1-v1"
     },
     {
-      "id": "ja-takk",
-      "src": "JATAKK",
+      "id": "ja_takk",
+      "src": "ja_takk",
       "category": "voice",
       "gain": 0,
       "etag": "JATAKK-v1"
     },
     {
-      "id": "jeg-fikk-bingo-a",
-      "src": "JegFikkBingo",
+      "id": "jeg_fikk_bingo_a",
+      "src": "jeg_fikk_bingo_a",
       "category": "voice",
       "gain": 0,
       "etag": "JegFikkBingo-v1"
     },
     {
-      "id": "jeg-fikk-bingo-b",
-      "src": "JegFikkBingo1",
+      "id": "jeg_fikk_bingo_b",
+      "src": "jeg_fikk_bingo_b",
       "category": "voice",
       "gain": 0,
       "etag": "JegFikkBingo1-v1"
     },
     {
-      "id": "jeg-skal-ha-gull-a",
-      "src": "JegSkalHaGull",
+      "id": "jeg_skal_ha_gull_a",
+      "src": "jeg_skal_ha_gull_a",
       "category": "voice",
       "gain": 0,
       "etag": "JegSkalHaGull-v1"
     },
     {
-      "id": "jeg-skal-ha-gull-b",
-      "src": "JegSkalHaGull1",
+      "id": "jeg_skal_ha_gull_b",
+      "src": "jeg_skal_ha_gull_b",
       "category": "voice",
       "gain": 0,
       "etag": "JegSkalHaGull1-v1"
     },
     {
-      "id": "kake-til-meg-a",
-      "src": "KakeTilMeg",
+      "id": "kake_til_meg_a",
+      "src": "kake_til_meg_a",
       "category": "voice",
       "gain": 0,
       "etag": "KakeTilMeg-v1"
     },
     {
-      "id": "kake-til-meg-b",
-      "src": "KakeTilMeg1",
+      "id": "kake_til_meg_b",
+      "src": "kake_til_meg_b",
       "category": "voice",
       "gain": 0,
       "etag": "KakeTilMeg1-v1"
     },
     {
-      "id": "premie-jeg-fikk-premie-a",
-      "src": "PREMIEJEGFIKKPREMIE",
+      "id": "premie_jeg_fikk_premie_a",
+      "src": "premie_jeg_fikk_premie_a",
       "category": "voice",
       "gain": 0,
       "etag": "PREMIEJEGFIKKPREMIE-v1"
     },
     {
-      "id": "premie-jeg-fikk-premie-b",
-      "src": "PREMIEJEGFIKKPREMIE1",
+      "id": "premie_jeg_fikk_premie_b",
+      "src": "premie_jeg_fikk_premie_b",
       "category": "voice",
       "gain": 0,
       "etag": "PREMIEJEGFIKKPREMIE1-v1"
     },
     {
-      "id": "premie-jubel-a",
-      "src": "Premiejubel",
+      "id": "premie_jubel_a",
+      "src": "premie_jubel_a",
       "category": "cheer",
       "gain": 0,
       "etag": "Premiejubel-v1"
     },
     {
-      "id": "premie-jubel-b",
-      "src": "Premiejubel1",
+      "id": "premie_jubel_b",
+      "src": "premie_jubel_b",
       "category": "cheer",
       "gain": 0,
       "etag": "Premiejubel1-v1"
     },
     {
-      "id": "woohoo-revolt",
-      "src": "WoohooRevolt",
+      "id": "woohoo_revolt",
+      "src": "woohoo_revolt",
       "category": "cheer",
       "gain": 0,
       "etag": "WoohooRevolt-v1"

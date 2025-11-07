@@ -103,6 +103,34 @@
   - Aktiver device toolbar i devtools (f.eks. iPhone 12). Knappene skal fortsatt være fullt brede, fokus og status lesbare.
   - Test tapping for play/fade; se etter utilsiktet zoom eller layout-skift.
 
+## 9. Bibliotek, Favoritter og Re-generering (kommende)
+- **Bibliotek/innstillingspanel**
+  - Skjult panel (hotspot øverst, langt-trykk, tastatur `L`) med modal overlay; fokus flyttes inn/ut på åpne/lukk.
+  - Viser manifest-listen med kolonner: tittel/id, kategori, preview-knapp, favoritt-toggle (★). Standard sortering: favoritter først, resten alfabetisk; filter “Vis bare favoritter”.
+  - Preview spiller via audio-engine i separat modus; stoppes hvis hovedknappen aktiveres.
+
+- **Favoritter**
+  - Lagres i `localStorage` som `bbz:v1:favorites` (ingen TTL); valgfri pref-lagring `bbz:v1:prefs`.
+  - Helper-funksjoner: `loadFavorites`, `saveFavorites`, `loadPrefs`, `savePrefs`.
+  - Ugyldige IDer fjernes ved manifest-endring; lokal melding: “Favoritter lagres ikke (privatmodus aktiv)” hvis storage utilgjengelig.
+
+- **Regenerer rekkefølge**
+  - Knapp i biblioteket (`aria-label="Regenerer spillelisten med favoritter først"`), disabled når manifest er tomt.
+  - Handling: fade/stop hovedavspilling → bygg order = shuffle(favorites) + shuffle(nonFavorites) → `playlistIds=order`, `index=0`, `createdAt=Date.now()`, behold `manifestEtag`.
+  - Vis toast/inline melding “Ny rekkefølge generert: F favoritter + U øvrige”.
+  - Edge-cases: 0/alle favoritter → gjelder fortsatt; fallback i minne hvis storage blokkeres.
+
+- **Tilgjengelighet**
+  - Panel `role="dialog" aria-modal="true"`; alle knapper med aria-labels; status/feedback via `aria-live="polite"`.
+
+- **QA-kriterier**
+  - Favoritter beholdes ved reload; regen gir favoritter først.
+  - `createdAt` oppdateres; auto-reset ikke trigget umiddelbart.
+  - Preview vs hovedavspilling isoleres; ingen bibliotek-elementer på hovedskjermen.
+
+- **Debug**
+  - `window.bingoBuzzDebug.regenByFavorites()` trigger samme logikk for test.
+
 ## 8. Future Enhancements (Backlog)
 - Volume slider and fade-length options persisted via storage.
 - Offline caching with Service Worker and versioned assets.

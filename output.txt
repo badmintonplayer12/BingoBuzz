@@ -5,6 +5,7 @@ Folder Structure
 assets/
     css/
         style.css
+        style_old.css
     icons/
     js/
         app.js
@@ -95,6 +96,230 @@ File End
 
 
 assets\css\style.css
+File type: .css
+:root {
+  --bg-start: #352b6b;
+  --bg-mid: #1b1638;
+  --bg-end: #0a0818;
+  --bg-tint-hue: 210;
+  --btn-color-start: #ff6b6b;
+  --btn-color-mid: #ff4f4f;
+  --btn-color-end: #e63838;
+  --btn-active-glow: rgba(255, 220, 120, 0.85);
+  --btn-idle-glow: rgba(255, 210, 90, 0.45);
+  --btn-fade-glow: rgba(120, 200, 255, 0.8);
+  --status-bg: rgba(0, 0, 0, 0.32);
+  --status-border: rgba(255, 255, 255, 0.24);
+  --status-text: rgba(255, 255, 255, 0.92);
+  --reset-bg: rgba(255, 255, 255, 0.12);
+  --reset-text: rgba(255, 255, 255, 0.85);
+  --font-stack: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-stack);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(120, 50, 255, 0.35) 0%, rgba(10, 5, 21, 0.92) 55%),
+    radial-gradient(circle at 80% 80%, rgba(255, 60, 120, 0.3) 0%, rgba(5, 3, 15, 0.9) 60%),
+    linear-gradient(120deg, #04010a 0%, #0a0620 50%, #030009 100%);
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+body::before,
+body::after {
+  display: none;
+}
+
+.big-btn-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  gap: 2.5rem;
+  z-index: 1;
+}
+
+
+.big-btn {
+  position: relative;
+  width: min(75vmin, 75vw);
+  height: min(75vmin, 75vw);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--btn-color-start);
+  transition: transform 140ms ease, opacity 200ms ease;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+}
+
+
+.big-btn:hover {
+  opacity: 0.9;
+}
+
+.big-btn:active {
+  transform: scale(0.96);
+}
+
+.big-btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.6);
+}
+
+.big-btn.is-playing {
+  animation: pulse-play-loop 1.6s ease-in-out infinite;
+}
+
+.big-btn.is-fading {
+  cursor: not-allowed;
+  transform: scale(0.9);
+  transition: transform var(--fade-ms, 1200ms) ease;
+}
+
+.big-btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.reset-banner {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.reset-chip {
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.4rem;
+  background: var(--reset-bg);
+  color: var(--reset-text);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: transform 200ms ease, background-color 200ms ease;
+}
+
+.reset-chip:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.reset-chip:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+}
+
+.noscript-warning {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 480px;
+  padding: 1.25rem 1.75rem;
+  border-radius: 16px;
+  background: rgba(255, 247, 185, 0.2);
+  color: #fff3c0;
+  font-weight: 500;
+  text-align: center;
+}
+
+
+@keyframes pulse-play-loop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes pulse-fading {
+  0%,
+  100% {
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.5),
+      0 0 120px var(--btn-fade-glow),
+      inset 0 0 34px hsla(var(--theme-hue, 200), 60%, 75%, 0.28),
+      inset 0 -16px 26px rgba(0, 0, 0, 0.32);
+  }
+  50% {
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.45),
+      0 0 160px hsla(var(--theme-hue, 200), 70%, 68%, 0.75),
+      inset 0 0 46px hsla(var(--theme-hue, 200), 65%, 78%, 0.34),
+      inset 0 -18px 28px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes bg-shift {
+  0% {
+    background-position: 30% 30%;
+  }
+  50% {
+    background-position: 70% 70%;
+  }
+  100% {
+    background-position: 50% 50%;
+  }
+}
+
+@keyframes nebula-move {
+  0% {
+    background-position: 40% 60%, 60% 40%, 50% 80%;
+    transform: scale(1);
+  }
+  50% {
+    background-position: 60% 40%, 40% 60%, 48% 85%;
+    transform: scale(1.05);
+  }
+  100% {
+    background-position: 50% 50%, 50% 50%, 50% 90%;
+    transform: scale(1);
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .big-btn,
+  .big-btn.is-playing,
+  .big-btn.is-fading {
+    animation: none;
+  }
+}
+
+
+--------------------------------------------------
+File End
+--------------------------------------------------
+
+
+assets\css\style_old.css
 File type: .css
 :root {
   --bg-start: #352b6b;
@@ -300,7 +525,7 @@ body.-fading .big-btn-screen::before {
 }
 
 .big-btn.is-playing {
-  animation: pulse-playing 1.8s ease-in-out infinite;
+  animation: pulse-play-once 600ms cubic-bezier(.2,.8,.25,1) both;
 }
 
 .big-btn.is-fading,
@@ -355,17 +580,26 @@ body.-fading .big-btn-screen::before {
 }
 
 
-@keyframes pulse-playing {
-  0%,
-  100% {
-    box-shadow:
-      0 18px 50px rgba(0, 0, 0, 0.4),
-      0 0 110px var(--btn-active-glow);
-  }
+
   50% {
     box-shadow:
       0 28px 70px rgba(0, 0, 0, 0.45),
       0 0 170px var(--btn-active-glow);
+  }
+}
+
+@keyframes pulse-play-once {
+  0% {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 130px var(--btn-active-glow);
+  }
+  70% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.4), 0 0 110px var(--btn-active-glow);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35), 0 0 90px var(--btn-active-glow);
   }
 }
 
@@ -431,18 +665,6 @@ body.-fading .big-btn-screen::before {
   }
 }
 
-
-@keyframes popBack {
-  0% {
-    transform: translateY(16px) scale(0.86);
-  }
-  55% {
-    transform: translateY(-3px) scale(1.05);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
-}
 
 .big-btn.post-bounce {
   animation: popBack 420ms cubic-bezier(.2,.9,.3,1.4) both;
@@ -549,6 +771,7 @@ function handlePlaybackEnded({ reason } = {}) {
   if (reason === "cleanup" || reason === "error") {
     return;
   }
+  elements.actionButton?.classList.remove("is-playing");
   if (playlist.isComplete()) {
     updateUi({
       statusText: "Alt spilt i denne økta · Start på nytt",
@@ -653,6 +876,7 @@ function updateButtonColor() {
 
 async function playClipResult(result) {
   if (!result || !result.clip) {
+    elements.actionButton?.classList.remove("is-playing");
     updateUi({
       statusText: "Alt spilt i denne økta · Start på nytt",
       actionLabel: "Alt spilt",
@@ -672,6 +896,7 @@ async function playClipResult(result) {
       buttonState: "playing",
       showReset: false,
     });
+    elements.actionButton?.classList.add("is-playing");
 
     await audioEngine.play(result.clip);
     playlist.markSuccess();
@@ -687,6 +912,7 @@ async function playClipResult(result) {
     });
   } catch (error) {
     console.error("playClipResult failed", error);
+    elements.actionButton?.classList.remove("is-playing");
 
     if (error?.name === "NotAllowedError") {
       updateUi({
@@ -738,6 +964,7 @@ async function playNext() {
 
 async function handleActionClick() {
   if (audioEngine.state === "playing") {
+    elements.actionButton?.classList.remove("is-playing");
     updateUi({
       statusText: "Fader ut …",
       actionLabel: "Fader ut …",

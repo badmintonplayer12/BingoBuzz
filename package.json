@@ -1,0 +1,23 @@
+{
+  "name": "bingobuzz",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badmintonplayer12/BingoBuzz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badmintonplayer12/BingoBuzz/issues"
+  },
+  "homepage": "https://github.com/badmintonplayer12/BingoBuzz#readme",
+  "devDependencies": {
+    "vitest": "^4.0.7"
+  }
+}

@@ -10,6 +10,8 @@ export const STORAGE_KEYS = {
   index: `${STORAGE_NAMESPACE}:index`,
   createdAt: `${STORAGE_NAMESPACE}:createdAt`,
   manifestEtag: `${STORAGE_NAMESPACE}:manifestEtag`,
+  favorites: `${STORAGE_NAMESPACE}:favorites`,
+  prefs: `${STORAGE_NAMESPACE}:prefs`,
 };
 
 export const MANIFEST_URL = "assets/sounds/bingobuzz/manifest.json";

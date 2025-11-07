@@ -47,6 +47,54 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
+function normalizeFavoritesInput(favorites) {
+  if (!favorites) {
+    return new Set();
+  }
+  if (favorites instanceof Set) {
+    return new Set([...favorites].filter((id) => typeof id === "string" && id));
+  }
+  if (Array.isArray(favorites)) {
+    return new Set(favorites.filter((id) => typeof id === "string" && id));
+  }
+  return new Set();
+}
+
+export function buildFavoritesFirstOrder({
+  files = [],
+  favorites,
+  seed,
+} = {}) {
+  const manifestIds = Array.isArray(files)
+    ? files.map((file) => file?.id).filter(Boolean)
+    : [];
+  if (!manifestIds.length) {
+    return { order: [], favoriteCount: 0, restCount: 0 };
+  }
+  const favoriteSet = normalizeFavoritesInput(favorites);
+  const favoritesList = [];
+  const restList = [];
+  manifestIds.forEach((id) => {
+    if (favoriteSet.has(id)) {
+      favoritesList.push(id);
+    } else {
+      restList.push(id);
+    }
+  });
+  const baseSeed = typeof seed === "number" ? seed : Date.now();
+  const favoritesOrder = favoritesList.length
+    ? fisherYatesShuffle(favoritesList, baseSeed)
+    : [];
+  const restOrder = restList.length
+    ? fisherYatesShuffle(restList, baseSeed ^ 0x9e3779b1)
+    : [];
+  return {
+    order: [...favoritesOrder, ...restOrder],
+    favoriteCount: favoritesList.length,
+    restCount: restList.length,
+  };
+}
+
 export function createPlaylist() {
   const state = {
     trackMap: new Map(),
@@ -216,6 +264,34 @@ export function createPlaylist() {
     return state.cursor >= state.order.length;
   }
 
+  function applyOrder(order, { resetCursor = true } = {}) {
+    if (!Array.isArray(order) || !order.length) {
+      buildOrder({ seed: state.seed ?? Date.now() });
+      state.cursor = 0;
+      state.lastId = null;
+      state.consecutiveSkips = 0;
+      return getSnapshot();
+    }
+    const seen = new Set();
+    const filtered = [];
+    order.forEach((id) => {
+      if (state.trackMap.has(id) && !seen.has(id)) {
+        filtered.push(id);
+        seen.add(id);
+      }
+    });
+    for (const id of state.trackMap.keys()) {
+      if (!seen.has(id)) {
+        filtered.push(id);
+      }
+    }
+    state.order = filtered;
+    state.cursor = resetCursor ? 0 : clamp(state.cursor, 0, state.order.length);
+    state.lastId = null;
+    state.consecutiveSkips = 0;
+    return getSnapshot();
+  }
+
   return {
     init,
     next,
@@ -224,6 +300,7 @@ export function createPlaylist() {
     skipFailed,
     markSuccess,
     isComplete,
+    applyOrder,
     snapshot: getSnapshot,
     get size() {
       return state.order.length;

@@ -9,6 +9,12 @@
   </head>
   <body>
     <main class="big-btn-screen" aria-live="polite">
+      <button
+        class="library-hotspot"
+        type="button"
+        aria-label="Åpne bibliotek"
+      ></button>
+
       <button id="action-button" class="big-btn" type="button" aria-label="Start neste"></button>
 
       <div class="reset-banner" hidden>
@@ -23,6 +29,26 @@
         BingoBuzz trenger JavaScript for å spille av festlige lyder. Aktiver JavaScript og last siden på nytt.
       </p>
     </noscript>
+
+    <div id="library-overlay" class="library-overlay" role="dialog" aria-modal="true" hidden>
+      <div class="library-panel" role="document">
+        <header class="library-header">
+          <h2 id="library-title">Bibliotek &amp; favoritter</h2>
+          <div class="library-controls">
+            <button id="regen-button" type="button" class="regen-button" disabled aria-label="Regenerer spillelisten med favoritter først">
+              Regenerer rekkefølge
+            </button>
+            <label class="favorites-filter">
+              <input type="checkbox" id="favorites-toggle">
+              <span>Vis bare favoritter</span>
+            </label>
+            <button id="library-close" type="button" class="close-button" aria-label="Lukk bibliotek">×</button>
+          </div>
+        </header>
+        <p class="library-status" id="library-status" aria-live="polite"></p>
+        <div class="library-list" id="library-list" role="region" aria-labelledby="library-title"></div>
+      </div>
+    </div>
 
     <script type="module" src="assets/js/app.js"></script>
   </body>
