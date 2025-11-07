@@ -14,6 +14,7 @@
     {
       "id": "anei_jeg_mener_a_ja_bingo",
       "src": "anei_jeg_mener_a_ja_bingo",
+      "display": "A nei, jeg mener a ja bingo",
       "category": "voice",
       "gain": 0,
       "etag": "ANeiJegMenerAJaBingo-v1"
@@ -21,6 +22,7 @@
     {
       "id": "bingo_en_opera_jingle_a",
       "src": "bingo_en_opera_jingle_a",
+      "display": "BINGO – en opera jingle (A)",
       "category": "jingle",
       "gain": 0,
       "etag": "BINGOEnOperajingle-v1"
@@ -28,11 +30,13 @@
     {
       "id": "bingo_en_opera_jingle_b",
       "src": "bingo_en_opera_jingle_b",
+      "display": "BINGO – en opera jingle (B)",
       "category": "jingle",
       "gain": 0,
       "etag": "BINGOEnOperajingle1-v1"
     },
     {
+      "display": "Bingo Baby A",
       "id": "bingo_baby_a",
       "src": "bingo_baby_a",
       "category": "music",
@@ -40,6 +44,7 @@
       "etag": "BingoBaby-v1"
     },
     {
+      "display": "Bingo Baby B",
       "id": "bingo_baby_b",
       "src": "bingo_baby_b",
       "category": "music",
@@ -47,6 +52,7 @@
       "etag": "BingoBaby1-v1"
     },
     {
+      "display": "Bingo Bash A",
       "id": "bingo_bash_a",
       "src": "bingo_bash_a",
       "category": "music",
@@ -54,6 +60,7 @@
       "etag": "BingoBash-v1"
     },
     {
+      "display": "Bingo Bash B",
       "id": "bingo_bash_b",
       "src": "bingo_bash_b",
       "category": "music",
@@ -61,6 +68,7 @@
       "etag": "BingoBash1-v1"
     },
     {
+      "display": "Bingo Beat A",
       "id": "bingo_beat_a",
       "src": "bingo_beat_a",
       "category": "music",
@@ -68,6 +76,7 @@
       "etag": "BingoBeat-v1"
     },
     {
+      "display": "Bingo Beat B",
       "id": "bingo_beat_b",
       "src": "bingo_beat_b",
       "category": "music",
@@ -75,6 +84,7 @@
       "etag": "BingoBeat1-v1"
     },
     {
+      "display": "Bingo Fever A",
       "id": "bingo_fever_a",
       "src": "bingo_fever_a",
       "category": "music",
@@ -82,6 +92,7 @@
       "etag": "BingoFever-v1"
     },
     {
+      "display": "Bingo Fever B",
       "id": "bingo_fever_b",
       "src": "bingo_fever_b",
       "category": "music",
@@ -89,6 +100,7 @@
       "etag": "BingoFever1-v1"
     },
     {
+      "display": "Bingo Jingle A",
       "id": "bingo_jingle_a",
       "src": "bingo_jingle_a",
       "category": "jingle",
@@ -96,6 +108,7 @@
       "etag": "BingoJingle-v1"
     },
     {
+      "display": "Bingo Jingle B",
       "id": "bingo_jingle_b",
       "src": "bingo_jingle_b",
       "category": "jingle",
@@ -103,6 +116,7 @@
       "etag": "BingoJingle1-v1"
     },
     {
+      "display": "Bingo Jingle C",
       "id": "bingo_jingle_c",
       "src": "bingo_jingle_c",
       "category": "jingle",
@@ -110,6 +124,7 @@
       "etag": "BingoJingle2-v1"
     },
     {
+      "display": "Bingo Jingle D",
       "id": "bingo_jingle_d",
       "src": "bingo_jingle_d",
       "category": "jingle",
@@ -117,6 +132,7 @@
       "etag": "BingoJingle3-v1"
     },
     {
+      "display": "Bingo Showstopper A",
       "id": "bingo_showstopper_a",
       "src": "bingo_showstopper_a",
       "category": "jingle",
@@ -124,6 +140,7 @@
       "etag": "BingoShowstopper-v1"
     },
     {
+      "display": "Bingo Showstopper B",
       "id": "bingo_showstopper_b",
       "src": "bingo_showstopper_b",
       "category": "jingle",
@@ -131,6 +148,7 @@
       "etag": "BingoShowstopper1-v1"
     },
     {
+      "display": "Ja Takk",
       "id": "ja_takk",
       "src": "ja_takk",
       "category": "voice",
@@ -138,6 +156,7 @@
       "etag": "JATAKK-v1"
     },
     {
+      "display": "Jeg Fikk Bingo A",
       "id": "jeg_fikk_bingo_a",
       "src": "jeg_fikk_bingo_a",
       "category": "voice",
@@ -145,6 +164,7 @@
       "etag": "JegFikkBingo-v1"
     },
     {
+      "display": "Jeg Fikk Bingo B",
       "id": "jeg_fikk_bingo_b",
       "src": "jeg_fikk_bingo_b",
       "category": "voice",
@@ -152,6 +172,7 @@
       "etag": "JegFikkBingo1-v1"
     },
     {
+      "display": "Jeg Skal Ha Gull A",
       "id": "jeg_skal_ha_gull_a",
       "src": "jeg_skal_ha_gull_a",
       "category": "voice",
@@ -159,6 +180,7 @@
       "etag": "JegSkalHaGull-v1"
     },
     {
+      "display": "Jeg Skal Ha Gull B",
       "id": "jeg_skal_ha_gull_b",
       "src": "jeg_skal_ha_gull_b",
       "category": "voice",
@@ -166,6 +188,7 @@
       "etag": "JegSkalHaGull1-v1"
     },
     {
+      "display": "Kake Til Meg A",
       "id": "kake_til_meg_a",
       "src": "kake_til_meg_a",
       "category": "voice",
@@ -173,6 +196,7 @@
       "etag": "KakeTilMeg-v1"
     },
     {
+      "display": "Kake Til Meg B",
       "id": "kake_til_meg_b",
       "src": "kake_til_meg_b",
       "category": "voice",
@@ -180,6 +204,7 @@
       "etag": "KakeTilMeg1-v1"
     },
     {
+      "display": "Premie Jeg Fikk Premie A",
       "id": "premie_jeg_fikk_premie_a",
       "src": "premie_jeg_fikk_premie_a",
       "category": "voice",
@@ -187,6 +212,7 @@
       "etag": "PREMIEJEGFIKKPREMIE-v1"
     },
     {
+      "display": "Premie Jeg Fikk Premie B",
       "id": "premie_jeg_fikk_premie_b",
       "src": "premie_jeg_fikk_premie_b",
       "category": "voice",
@@ -194,6 +220,7 @@
       "etag": "PREMIEJEGFIKKPREMIE1-v1"
     },
     {
+      "display": "Hvor Er Premie - Jeg Fikk Premie",
       "id": "hvor_er_premie_-_jeg_fikk_premie",
       "src": "Hvor_er_premie_-_jeg_fikk_premie",
       "category": "voice",
@@ -201,6 +228,7 @@
       "etag": "Hvor_er_premie_-_jeg_fikk_premie-v1"
     },
     {
+      "display": "Premie Jubel A",
       "id": "premie_jubel_a",
       "src": "premie_jubel_a",
       "category": "cheer",
@@ -208,6 +236,7 @@
       "etag": "Premiejubel-v1"
     },
     {
+      "display": "Premie Jubel B",
       "id": "premie_jubel_b",
       "src": "premie_jubel_b",
       "category": "cheer",
@@ -215,6 +244,7 @@
       "etag": "Premiejubel1-v1"
     },
     {
+      "display": "Woohoo Revolt",
       "id": "woohoo_revolt",
       "src": "woohoo_revolt",
       "category": "cheer",

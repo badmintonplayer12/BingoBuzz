@@ -19,9 +19,14 @@ function sanitizeFile(entry) {
   if (!id || !src) {
     return null;
   }
+  const display =
+    typeof entry.display === "string" && entry.display.trim()
+      ? entry.display.trim()
+      : null;
   return {
     id,
     src,
+    display,
     category:
       typeof entry.category === "string" && entry.category.trim()
         ? entry.category.trim()

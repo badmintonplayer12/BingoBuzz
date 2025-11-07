@@ -62,6 +62,11 @@ function humanizeClipId(id) {
   return typeof id === "string" ? id.replace(/_/g, " ") : "";
 }
 
+function getDisplayName(file) {
+  if (!file) return "";
+  return file.display ?? humanizeClipId(file.id);
+}
+
 function clearLongPressTimer() {
   if (longPressTimer) {
     window.clearTimeout(longPressTimer);
@@ -385,7 +390,7 @@ function renderLibraryList() {
   filteredRows.forEach((file) => {
     const item = document.createElement("div");
     item.className = "library-item";
-    const displayName = humanizeClipId(file.id);
+    const displayName = getDisplayName(file);
 
     const meta = document.createElement("div");
     meta.className = "library-item__meta";
