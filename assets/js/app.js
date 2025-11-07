@@ -214,6 +214,8 @@ async function playClipResult(result) {
       buttonState: "playing",
       showReset: false,
     });
+    elements.actionButton?.classList.add("is-playing");
+    setTimeout(() => elements.actionButton?.classList.remove("is-playing"), 600);
 
     await audioEngine.play(result.clip);
     playlist.markSuccess();

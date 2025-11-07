@@ -202,7 +202,7 @@ body.-fading .big-btn-screen::before {
 }
 
 .big-btn.is-playing {
-  animation: pulse-playing 1.8s ease-in-out infinite;
+  animation: pulse-play-once 600ms cubic-bezier(.2,.8,.25,1) both;
 }
 
 .big-btn.is-fading,
@@ -257,17 +257,26 @@ body.-fading .big-btn-screen::before {
 }
 
 
-@keyframes pulse-playing {
-  0%,
-  100% {
-    box-shadow:
-      0 18px 50px rgba(0, 0, 0, 0.4),
-      0 0 110px var(--btn-active-glow);
-  }
+
   50% {
     box-shadow:
       0 28px 70px rgba(0, 0, 0, 0.45),
       0 0 170px var(--btn-active-glow);
+  }
+}
+
+@keyframes pulse-play-once {
+  0% {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 130px var(--btn-active-glow);
+  }
+  70% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.4), 0 0 110px var(--btn-active-glow);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35), 0 0 90px var(--btn-active-glow);
   }
 }
 
@@ -333,18 +342,6 @@ body.-fading .big-btn-screen::before {
   }
 }
 
-
-@keyframes popBack {
-  0% {
-    transform: translateY(16px) scale(0.86);
-  }
-  55% {
-    transform: translateY(-3px) scale(1.05);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
-}
 
 .big-btn.post-bounce {
   animation: popBack 420ms cubic-bezier(.2,.9,.3,1.4) both;
