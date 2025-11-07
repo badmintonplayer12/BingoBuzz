@@ -9,7 +9,7 @@
     "targetLufs": -14,
     "peakDbtp": -1
   },
-  "manifestEtag": "nc-pack-v2",
+  "manifestEtag": "nc-pack-v3",
   "files": [
     {
       "id": "anei_jeg_mener_a_ja_bingo",
@@ -192,6 +192,13 @@
       "category": "voice",
       "gain": 0,
       "etag": "PREMIEJEGFIKKPREMIE1-v1"
+    },
+    {
+      "id": "hvor_er_premie_-_jeg_fikk_premie",
+      "src": "Hvor_er_premie_-_jeg_fikk_premie",
+      "category": "voice",
+      "gain": 0,
+      "etag": "Hvor_er_premie_-_jeg_fikk_premie-v1"
     },
     {
       "id": "premie_jubel_a",
