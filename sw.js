@@ -1,16 +1,16 @@
 const SHELL_CACHE = "bbz-shell-v2";
 const AUDIO_CACHE = "bbz-audio-v2";
 const SHELL_ASSETS = [
-  "/",
-  "/index.html",
-  "/assets/css/style.css",
-  "/assets/js/app.js",
-  "/assets/js/audio-engine.js",
-  "/assets/js/playlist.js",
-  "/assets/js/storage.js",
-  "/assets/js/constants.js",
-  "/assets/js/manifest.js",
-  "/app.webmanifest",
+  "./",
+  "./index.html",
+  "./assets/css/style.css",
+  "./assets/js/app.js",
+  "./assets/js/audio-engine.js",
+  "./assets/js/playlist.js",
+  "./assets/js/storage.js",
+  "./assets/js/constants.js",
+  "./assets/js/manifest.js",
+  "./app.webmanifest",
 ];
 
 self.addEventListener("install", (event) => {

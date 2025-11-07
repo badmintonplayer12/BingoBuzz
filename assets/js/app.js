@@ -1036,7 +1036,7 @@ if (typeof window !== "undefined") {
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("./sw.js", { scope: "./" })
       .catch((error) => console.warn("SW registration failed", error));
   }
 
