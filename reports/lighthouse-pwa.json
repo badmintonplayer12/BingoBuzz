@@ -1,0 +1,782 @@
+{
+  "lighthouseVersion": "10.4.0",
+  "requestedUrl": "http://localhost:8000/",
+  "mainDocumentUrl": "http://localhost:8000/",
+  "finalDisplayedUrl": "http://localhost:8000/",
+  "finalUrl": "http://localhost:8000/",
+  "fetchTime": "2025-11-07T21:54:47.026Z",
+  "gatherMode": "navigation",
+  "runtimeError": {
+    "code": "NO_FCP",
+    "message": "The page did not paint any content. Please ensure you keep the browser window in the foreground during the load and try again. (NO_FCP)"
+  },
+  "runWarnings": [
+    "The page did not paint any content. Please ensure you keep the browser window in the foreground during the load and try again. (NO_FCP)"
+  ],
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/142.0.0.0 Safari/537.36",
+  "environment": {
+    "networkUserAgent": "",
+    "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/142.0.0.0 Safari/537.36",
+    "benchmarkIndex": 2640.5,
+    "credits": {}
+  },
+  "audits": {
+    "service-worker": {
+      "id": "service-worker",
+      "title": "Registers a service worker that controls page and `start_url`",
+      "description": "The service worker is the technology that enables your app to use many Progressive Web App features, such as offline, add to homescreen, and push notifications. [Learn more about Service Workers](https://developer.chrome.com/docs/lighthouse/pwa/service-worker/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required ServiceWorker gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:45)\n    at navigation (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/index.js:96:17)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async runLighthouse (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/run.js:250:8)\n    at async file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/index.js:10:1"
+    },
+    "viewport": {
+      "id": "viewport",
+      "title": "Has a `<meta name=\"viewport\">` tag with `width` or `initial-scale`",
+      "description": "A `<meta name=\"viewport\">` not only optimizes your app for mobile screen sizes, but also prevents [a 300 millisecond delay to user input](https://developer.chrome.com/blog/300ms-tap-delay-gone-away/). [Learn more about using the viewport meta tag](https://developer.chrome.com/docs/lighthouse/pwa/viewport/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required MetaElements gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:32)"
+    },
+    "installable-manifest": {
+      "id": "installable-manifest",
+      "title": "Web app manifest and service worker meet the installability requirements",
+      "description": "Service worker is the technology that enables your app to use many Progressive Web App features, such as offline, add to homescreen, and push notifications. With proper service worker and manifest implementations, browsers can proactively prompt users to add your app to their homescreen, which can lead to higher engagement. [Learn more about manifest installability requirements](https://developer.chrome.com/docs/lighthouse/pwa/installable-manifest/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required WebAppManifest gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:32)\n    at async runLighthouse (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/run.js:250:8)\n    at async file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/index.js:10:1"
+    },
+    "splash-screen": {
+      "id": "splash-screen",
+      "title": "Configured for a custom splash screen",
+      "description": "A themed splash screen ensures a high-quality experience when users launch your app from their homescreens. [Learn more about splash screens](https://developer.chrome.com/docs/lighthouse/pwa/splash-screen/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required WebAppManifest gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:32)\n    at async runLighthouse (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/run.js:250:8)\n    at async file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/index.js:10:1"
+    },
+    "themed-omnibox": {
+      "id": "themed-omnibox",
+      "title": "Sets a theme color for the address bar.",
+      "description": "The browser address bar can be themed to match your site. [Learn more about theming the address bar](https://developer.chrome.com/docs/lighthouse/pwa/themed-omnibox/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required WebAppManifest gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:32)\n    at async runLighthouse (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/run.js:250:8)\n    at async file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/index.js:10:1"
+    },
+    "maskable-icon": {
+      "id": "maskable-icon",
+      "title": "Manifest has a maskable icon",
+      "description": "A maskable icon ensures that the image fills the entire shape without being letterboxed when installing the app on a device. [Learn about maskable manifest icons](https://developer.chrome.com/docs/lighthouse/pwa/maskable-icon-audit/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required WebAppManifest gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:32)\n    at async runLighthouse (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/run.js:250:8)\n    at async file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/index.js:10:1"
+    },
+    "content-width": {
+      "id": "content-width",
+      "title": "Content is sized correctly for the viewport",
+      "description": "If the width of your app's content doesn't match the width of the viewport, your app might not be optimized for mobile screens. [Learn how to size content for the viewport](https://developer.chrome.com/docs/lighthouse/pwa/content-width/).",
+      "score": null,
+      "scoreDisplayMode": "error",
+      "errorMessage": "Required ViewportDimensions gatherer did not run.",
+      "errorStack": "LighthouseError: MISSING_REQUIRED_ARTIFACT\n    at Runner._runAudit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:412:17)\n    at Runner._runAudits (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:370:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Runner.audit (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/core/runner.js:62:32)\n    at async runLighthouse (file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/run.js:250:8)\n    at async file:///C:/Users/privat/AppData/Local/npm-cache/_npx/8a159815bed77dd7/node_modules/lighthouse/cli/index.js:10:1"
+    },
+    "pwa-cross-browser": {
+      "id": "pwa-cross-browser",
+      "title": "Site works cross-browser",
+      "description": "To reach the most number of users, sites should work across every major browser. [Learn about cross-browser compatibility](https://developer.chrome.com/docs/lighthouse/pwa/pwa-cross-browser/).",
+      "score": null,
+      "scoreDisplayMode": "manual"
+    },
+    "pwa-page-transitions": {
+      "id": "pwa-page-transitions",
+      "title": "Page transitions don't feel like they block on the network",
+      "description": "Transitions should feel snappy as you tap around, even on a slow network. This experience is key to a user's perception of performance. [Learn more about page transitions](https://developer.chrome.com/docs/lighthouse/pwa/pwa-page-transitions/).",
+      "score": null,
+      "scoreDisplayMode": "manual"
+    },
+    "pwa-each-page-has-url": {
+      "id": "pwa-each-page-has-url",
+      "title": "Each page has a URL",
+      "description": "Ensure individual pages are deep linkable via URL and that URLs are unique for the purpose of shareability on social media. [Learn more about providing deep links](https://developer.chrome.com/docs/lighthouse/pwa/pwa-each-page-has-url/).",
+      "score": null,
+      "scoreDisplayMode": "manual"
+    }
+  },
+  "configSettings": {
+    "output": [
+      "json"
+    ],
+    "maxWaitForFcp": 30000,
+    "maxWaitForLoad": 45000,
+    "pauseAfterFcpMs": 1000,
+    "pauseAfterLoadMs": 1000,
+    "networkQuietThresholdMs": 1000,
+    "cpuQuietThresholdMs": 1000,
+    "formFactor": "mobile",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    },
+    "throttlingMethod": "simulate",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Mobile Safari/537.36",
+    "auditMode": false,
+    "gatherMode": false,
+    "disableStorageReset": false,
+    "debugNavigation": false,
+    "channel": "cli",
+    "usePassiveGathering": false,
+    "disableFullPageScreenshot": false,
+    "skipAboutBlank": false,
+    "blankPage": "about:blank",
+    "budgets": null,
+    "locale": "en-US",
+    "blockedUrlPatterns": null,
+    "additionalTraceCategories": null,
+    "extraHeaders": null,
+    "precomputedLanternData": null,
+    "onlyAudits": null,
+    "onlyCategories": [
+      "pwa"
+    ],
+    "skipAudits": null
+  },
+  "categories": {
+    "pwa": {
+      "title": "PWA",
+      "description": "These checks validate the aspects of a Progressive Web App. [Learn what makes a good Progressive Web App](https://web.dev/pwa-checklist/).",
+      "manualDescription": "These checks are required by the baseline [PWA Checklist](https://web.dev/pwa-checklist/) but are not automatically checked by Lighthouse. They do not affect your score but it's important that you verify them manually.",
+      "supportedModes": [
+        "navigation"
+      ],
+      "auditRefs": [
+        {
+          "id": "installable-manifest",
+          "weight": 2,
+          "group": "pwa-installable"
+        },
+        {
+          "id": "service-worker",
+          "weight": 1,
+          "group": "pwa-optimized"
+        },
+        {
+          "id": "splash-screen",
+          "weight": 1,
+          "group": "pwa-optimized"
+        },
+        {
+          "id": "themed-omnibox",
+          "weight": 1,
+          "group": "pwa-optimized"
+        },
+        {
+          "id": "content-width",
+          "weight": 1,
+          "group": "pwa-optimized"
+        },
+        {
+          "id": "viewport",
+          "weight": 2,
+          "group": "pwa-optimized"
+        },
+        {
+          "id": "maskable-icon",
+          "weight": 1,
+          "group": "pwa-optimized"
+        },
+        {
+          "id": "pwa-cross-browser",
+          "weight": 0
+        },
+        {
+          "id": "pwa-page-transitions",
+          "weight": 0
+        },
+        {
+          "id": "pwa-each-page-has-url",
+          "weight": 0
+        }
+      ],
+      "id": "pwa",
+      "score": null
+    }
+  },
+  "categoryGroups": {
+    "metrics": {
+      "title": "Metrics"
+    },
+    "load-opportunities": {
+      "title": "Opportunities",
+      "description": "These suggestions can help your page load faster. They don't [directly affect](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/) the Performance score."
+    },
+    "budgets": {
+      "title": "Budgets",
+      "description": "Performance budgets set standards for the performance of your site."
+    },
+    "diagnostics": {
+      "title": "Diagnostics",
+      "description": "More information about the performance of your application. These numbers don't [directly affect](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/) the Performance score."
+    },
+    "pwa-installable": {
+      "title": "Installable"
+    },
+    "pwa-optimized": {
+      "title": "PWA Optimized"
+    },
+    "a11y-best-practices": {
+      "title": "Best practices",
+      "description": "These items highlight common accessibility best practices."
+    },
+    "a11y-color-contrast": {
+      "title": "Contrast",
+      "description": "These are opportunities to improve the legibility of your content."
+    },
+    "a11y-names-labels": {
+      "title": "Names and labels",
+      "description": "These are opportunities to improve the semantics of the controls in your application. This may enhance the experience for users of assistive technology, like a screen reader."
+    },
+    "a11y-navigation": {
+      "title": "Navigation",
+      "description": "These are opportunities to improve keyboard navigation in your application."
+    },
+    "a11y-aria": {
+      "title": "ARIA",
+      "description": "These are opportunities to improve the usage of ARIA in your application which may enhance the experience for users of assistive technology, like a screen reader."
+    },
+    "a11y-language": {
+      "title": "Internationalization and localization",
+      "description": "These are opportunities to improve the interpretation of your content by users in different locales."
+    },
+    "a11y-audio-video": {
+      "title": "Audio and video",
+      "description": "These are opportunities to provide alternative content for audio and video. This may improve the experience for users with hearing or vision impairments."
+    },
+    "a11y-tables-lists": {
+      "title": "Tables and lists",
+      "description": "These are opportunities to improve the experience of reading tabular or list data using assistive technology, like a screen reader."
+    },
+    "seo-mobile": {
+      "title": "Mobile Friendly",
+      "description": "Make sure your pages are mobile friendly so users don’t have to pinch or zoom in order to read the content pages. [Learn how to make pages mobile-friendly](https://developers.google.com/search/mobile-sites/)."
+    },
+    "seo-content": {
+      "title": "Content Best Practices",
+      "description": "Format your HTML in a way that enables crawlers to better understand your app’s content."
+    },
+    "seo-crawl": {
+      "title": "Crawling and Indexing",
+      "description": "To appear in search results, crawlers need access to your app."
+    },
+    "best-practices-trust-safety": {
+      "title": "Trust and Safety"
+    },
+    "best-practices-ux": {
+      "title": "User Experience"
+    },
+    "best-practices-browser-compat": {
+      "title": "Browser Compatibility"
+    },
+    "best-practices-general": {
+      "title": "General"
+    },
+    "hidden": {
+      "title": ""
+    }
+  },
+  "stackPacks": [],
+  "timing": {
+    "entries": [
+      {
+        "startTime": 1232.33,
+        "name": "lh:config",
+        "duration": 295.61,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 1251.75,
+        "name": "lh:config:resolveArtifactsToDefns",
+        "duration": 57.77,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 1309.75,
+        "name": "lh:config:resolveNavigationsToDefns",
+        "duration": 0.19,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 1528.1,
+        "name": "lh:runner:gather",
+        "duration": 31244.19,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 1594.19,
+        "name": "lh:driver:connect",
+        "duration": 13.4,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 1607.92,
+        "name": "lh:driver:navigate",
+        "duration": 16.02,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 1624.18,
+        "name": "lh:gather:getBenchmarkIndex",
+        "duration": 1008.14,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2632.58,
+        "name": "lh:gather:getVersion",
+        "duration": 1.41,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2634.28,
+        "name": "lh:prepare:navigationMode",
+        "duration": 30.84,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2665.64,
+        "name": "lh:driver:navigate",
+        "duration": 10.76,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2677.18,
+        "name": "lh:prepare:navigation",
+        "duration": 59.97,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2699.62,
+        "name": "lh:storage:clearDataForOrigin",
+        "duration": 16.21,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2715.96,
+        "name": "lh:storage:clearBrowserCaches",
+        "duration": 19.68,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 2735.8,
+        "name": "lh:gather:prepareThrottlingAndNetwork",
+        "duration": 1.34,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32755.21,
+        "name": "lh:gather:getArtifact:DevtoolsLog",
+        "duration": 0.36,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32756.08,
+        "name": "lh:computed:NetworkRecords",
+        "duration": 1.41,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32772.65,
+        "name": "lh:runner:audit",
+        "duration": 6.23,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32772.76,
+        "name": "lh:runner:auditing",
+        "duration": 5.76,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32773.97,
+        "name": "lh:audit:service-worker",
+        "duration": 0.86,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32774.9,
+        "name": "lh:audit:viewport",
+        "duration": 0.38,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32775.37,
+        "name": "lh:audit:installable-manifest",
+        "duration": 0.35,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32775.78,
+        "name": "lh:audit:splash-screen",
+        "duration": 0.77,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32776.59,
+        "name": "lh:audit:themed-omnibox",
+        "duration": 0.25,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32776.88,
+        "name": "lh:audit:maskable-icon",
+        "duration": 0.3,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32777.23,
+        "name": "lh:audit:content-width",
+        "duration": 0.3,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32777.58,
+        "name": "lh:audit:pwa-cross-browser",
+        "duration": 0.17,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32778.23,
+        "name": "lh:audit:pwa-page-transitions",
+        "duration": 0.11,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32778.39,
+        "name": "lh:audit:pwa-each-page-has-url",
+        "duration": 0.12,
+        "entryType": "measure"
+      },
+      {
+        "startTime": 32778.53,
+        "name": "lh:runner:generate",
+        "duration": 0.34,
+        "entryType": "measure"
+      }
+    ],
+    "total": 31250.42
+  },
+  "i18n": {
+    "rendererFormattedStrings": {
+      "calculatorLink": "See calculator.",
+      "collapseView": "Collapse view",
+      "crcInitialNavigation": "Initial Navigation",
+      "crcLongestDurationLabel": "Maximum critical path latency:",
+      "dropdownCopyJSON": "Copy JSON",
+      "dropdownDarkTheme": "Toggle Dark Theme",
+      "dropdownPrintExpanded": "Print Expanded",
+      "dropdownPrintSummary": "Print Summary",
+      "dropdownSaveGist": "Save as Gist",
+      "dropdownSaveHTML": "Save as HTML",
+      "dropdownSaveJSON": "Save as JSON",
+      "dropdownViewer": "Open in Viewer",
+      "errorLabel": "Error!",
+      "errorMissingAuditInfo": "Report error: no audit information",
+      "expandView": "Expand view",
+      "firstPartyChipLabel": "1st party",
+      "footerIssue": "File an issue",
+      "hide": "Hide",
+      "labDataTitle": "Lab Data",
+      "lsPerformanceCategoryDescription": "[Lighthouse](https://developers.google.com/web/tools/lighthouse/) analysis of the current page on an emulated mobile network. Values are estimated and may vary.",
+      "manualAuditsGroupTitle": "Additional items to manually check",
+      "notApplicableAuditsGroupTitle": "Not applicable",
+      "openInANewTabTooltip": "Open in a new tab",
+      "opportunityResourceColumnLabel": "Opportunity",
+      "opportunitySavingsColumnLabel": "Estimated Savings",
+      "passedAuditsGroupTitle": "Passed audits",
+      "runtimeAnalysisWindow": "Initial page load",
+      "runtimeCustom": "Custom throttling",
+      "runtimeDesktopEmulation": "Emulated Desktop",
+      "runtimeMobileEmulation": "Emulated Moto G Power",
+      "runtimeNoEmulation": "No emulation",
+      "runtimeSettingsAxeVersion": "Axe version",
+      "runtimeSettingsBenchmark": "Unthrottled CPU/Memory Power",
+      "runtimeSettingsCPUThrottling": "CPU throttling",
+      "runtimeSettingsDevice": "Device",
+      "runtimeSettingsNetworkThrottling": "Network throttling",
+      "runtimeSettingsScreenEmulation": "Screen emulation",
+      "runtimeSettingsUANetwork": "User agent (network)",
+      "runtimeSingleLoad": "Single page load",
+      "runtimeSingleLoadTooltip": "This data is taken from a single page load, as opposed to field data summarizing many sessions.",
+      "runtimeSlow4g": "Slow 4G throttling",
+      "runtimeUnknown": "Unknown",
+      "show": "Show",
+      "showRelevantAudits": "Show audits relevant to:",
+      "snippetCollapseButtonLabel": "Collapse snippet",
+      "snippetExpandButtonLabel": "Expand snippet",
+      "thirdPartyResourcesLabel": "Show 3rd-party resources",
+      "throttlingProvided": "Provided by environment",
+      "toplevelWarningsMessage": "There were issues affecting this run of Lighthouse:",
+      "unattributable": "Unattributable",
+      "varianceDisclaimer": "Values are estimated and may vary. The [performance score is calculated](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/) directly from these metrics.",
+      "viewOriginalTraceLabel": "View Original Trace",
+      "viewTraceLabel": "View Trace",
+      "viewTreemapLabel": "View Treemap",
+      "warningAuditsGroupTitle": "Passed audits but with warnings",
+      "warningHeader": "Warnings: "
+    },
+    "icuMessagePaths": {
+      "core/lib/lh-error.js | noFcp": [
+        {
+          "values": {
+            "errorCode": "NO_FCP"
+          },
+          "path": "runtimeError.message"
+        },
+        {
+          "values": {
+            "errorCode": "NO_FCP"
+          },
+          "path": "runWarnings[0]"
+        }
+      ],
+      "core/audits/service-worker.js | title": [
+        "audits[service-worker].title"
+      ],
+      "core/audits/service-worker.js | description": [
+        "audits[service-worker].description"
+      ],
+      "core/lib/lh-error.js | missingRequiredArtifact": [
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "ServiceWorker"
+          },
+          "path": "audits[service-worker].errorMessage"
+        },
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "MetaElements"
+          },
+          "path": "audits.viewport.errorMessage"
+        },
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "WebAppManifest"
+          },
+          "path": "audits[installable-manifest].errorMessage"
+        },
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "WebAppManifest"
+          },
+          "path": "audits[splash-screen].errorMessage"
+        },
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "WebAppManifest"
+          },
+          "path": "audits[themed-omnibox].errorMessage"
+        },
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "WebAppManifest"
+          },
+          "path": "audits[maskable-icon].errorMessage"
+        },
+        {
+          "values": {
+            "errorCode": "MISSING_REQUIRED_ARTIFACT",
+            "artifactName": "ViewportDimensions"
+          },
+          "path": "audits[content-width].errorMessage"
+        }
+      ],
+      "core/audits/viewport.js | title": [
+        "audits.viewport.title"
+      ],
+      "core/audits/viewport.js | description": [
+        "audits.viewport.description"
+      ],
+      "core/audits/installable-manifest.js | title": [
+        "audits[installable-manifest].title"
+      ],
+      "core/audits/installable-manifest.js | description": [
+        "audits[installable-manifest].description"
+      ],
+      "core/audits/splash-screen.js | title": [
+        "audits[splash-screen].title"
+      ],
+      "core/audits/splash-screen.js | description": [
+        "audits[splash-screen].description"
+      ],
+      "core/audits/themed-omnibox.js | title": [
+        "audits[themed-omnibox].title"
+      ],
+      "core/audits/themed-omnibox.js | description": [
+        "audits[themed-omnibox].description"
+      ],
+      "core/audits/maskable-icon.js | title": [
+        "audits[maskable-icon].title"
+      ],
+      "core/audits/maskable-icon.js | description": [
+        "audits[maskable-icon].description"
+      ],
+      "core/audits/content-width.js | title": [
+        "audits[content-width].title"
+      ],
+      "core/audits/content-width.js | description": [
+        "audits[content-width].description"
+      ],
+      "core/audits/manual/pwa-cross-browser.js | title": [
+        "audits[pwa-cross-browser].title"
+      ],
+      "core/audits/manual/pwa-cross-browser.js | description": [
+        "audits[pwa-cross-browser].description"
+      ],
+      "core/audits/manual/pwa-page-transitions.js | title": [
+        "audits[pwa-page-transitions].title"
+      ],
+      "core/audits/manual/pwa-page-transitions.js | description": [
+        "audits[pwa-page-transitions].description"
+      ],
+      "core/audits/manual/pwa-each-page-has-url.js | title": [
+        "audits[pwa-each-page-has-url].title"
+      ],
+      "core/audits/manual/pwa-each-page-has-url.js | description": [
+        "audits[pwa-each-page-has-url].description"
+      ],
+      "core/config/default-config.js | pwaCategoryTitle": [
+        "categories.pwa.title"
+      ],
+      "core/config/default-config.js | pwaCategoryDescription": [
+        "categories.pwa.description"
+      ],
+      "core/config/default-config.js | pwaCategoryManualDescription": [
+        "categories.pwa.manualDescription"
+      ],
+      "core/config/default-config.js | metricGroupTitle": [
+        "categoryGroups.metrics.title"
+      ],
+      "core/config/default-config.js | loadOpportunitiesGroupTitle": [
+        "categoryGroups[load-opportunities].title"
+      ],
+      "core/config/default-config.js | loadOpportunitiesGroupDescription": [
+        "categoryGroups[load-opportunities].description"
+      ],
+      "core/config/default-config.js | budgetsGroupTitle": [
+        "categoryGroups.budgets.title"
+      ],
+      "core/config/default-config.js | budgetsGroupDescription": [
+        "categoryGroups.budgets.description"
+      ],
+      "core/config/default-config.js | diagnosticsGroupTitle": [
+        "categoryGroups.diagnostics.title"
+      ],
+      "core/config/default-config.js | diagnosticsGroupDescription": [
+        "categoryGroups.diagnostics.description"
+      ],
+      "core/config/default-config.js | pwaInstallableGroupTitle": [
+        "categoryGroups[pwa-installable].title"
+      ],
+      "core/config/default-config.js | pwaOptimizedGroupTitle": [
+        "categoryGroups[pwa-optimized].title"
+      ],
+      "core/config/default-config.js | a11yBestPracticesGroupTitle": [
+        "categoryGroups[a11y-best-practices].title"
+      ],
+      "core/config/default-config.js | a11yBestPracticesGroupDescription": [
+        "categoryGroups[a11y-best-practices].description"
+      ],
+      "core/config/default-config.js | a11yColorContrastGroupTitle": [
+        "categoryGroups[a11y-color-contrast].title"
+      ],
+      "core/config/default-config.js | a11yColorContrastGroupDescription": [
+        "categoryGroups[a11y-color-contrast].description"
+      ],
+      "core/config/default-config.js | a11yNamesLabelsGroupTitle": [
+        "categoryGroups[a11y-names-labels].title"
+      ],
+      "core/config/default-config.js | a11yNamesLabelsGroupDescription": [
+        "categoryGroups[a11y-names-labels].description"
+      ],
+      "core/config/default-config.js | a11yNavigationGroupTitle": [
+        "categoryGroups[a11y-navigation].title"
+      ],
+      "core/config/default-config.js | a11yNavigationGroupDescription": [
+        "categoryGroups[a11y-navigation].description"
+      ],
+      "core/config/default-config.js | a11yAriaGroupTitle": [
+        "categoryGroups[a11y-aria].title"
+      ],
+      "core/config/default-config.js | a11yAriaGroupDescription": [
+        "categoryGroups[a11y-aria].description"
+      ],
+      "core/config/default-config.js | a11yLanguageGroupTitle": [
+        "categoryGroups[a11y-language].title"
+      ],
+      "core/config/default-config.js | a11yLanguageGroupDescription": [
+        "categoryGroups[a11y-language].description"
+      ],
+      "core/config/default-config.js | a11yAudioVideoGroupTitle": [
+        "categoryGroups[a11y-audio-video].title"
+      ],
+      "core/config/default-config.js | a11yAudioVideoGroupDescription": [
+        "categoryGroups[a11y-audio-video].description"
+      ],
+      "core/config/default-config.js | a11yTablesListsVideoGroupTitle": [
+        "categoryGroups[a11y-tables-lists].title"
+      ],
+      "core/config/default-config.js | a11yTablesListsVideoGroupDescription": [
+        "categoryGroups[a11y-tables-lists].description"
+      ],
+      "core/config/default-config.js | seoMobileGroupTitle": [
+        "categoryGroups[seo-mobile].title"
+      ],
+      "core/config/default-config.js | seoMobileGroupDescription": [
+        "categoryGroups[seo-mobile].description"
+      ],
+      "core/config/default-config.js | seoContentGroupTitle": [
+        "categoryGroups[seo-content].title"
+      ],
+      "core/config/default-config.js | seoContentGroupDescription": [
+        "categoryGroups[seo-content].description"
+      ],
+      "core/config/default-config.js | seoCrawlingGroupTitle": [
+        "categoryGroups[seo-crawl].title"
+      ],
+      "core/config/default-config.js | seoCrawlingGroupDescription": [
+        "categoryGroups[seo-crawl].description"
+      ],
+      "core/config/default-config.js | bestPracticesTrustSafetyGroupTitle": [
+        "categoryGroups[best-practices-trust-safety].title"
+      ],
+      "core/config/default-config.js | bestPracticesUXGroupTitle": [
+        "categoryGroups[best-practices-ux].title"
+      ],
+      "core/config/default-config.js | bestPracticesBrowserCompatGroupTitle": [
+        "categoryGroups[best-practices-browser-compat].title"
+      ],
+      "core/config/default-config.js | bestPracticesGeneralGroupTitle": [
+        "categoryGroups[best-practices-general].title"
+      ]
+    }
+  }
+}

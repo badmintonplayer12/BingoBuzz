@@ -75,6 +75,32 @@
 - Validate that favorites persist across reloads and regen honors the priority.
 - Confirm TTL resets after manual regen and that preview playback stays isolated.
 
+# Implementation Plan: BingoBuzz PWA
+
+## 1. Web App Manifest & Icons
+- Create `/app.webmanifest` with full metadata (`name`, `short_name`, `start_url`, `scope`, `display`, `background_color`, `theme_color`).
+- Reference existing icons or add 192×192 and 512×512 PNGs under `assets/icons/`.
+- Update `index.html` `<head>` with:
+  - `<link rel="manifest" href="/app.webmanifest">`
+  - `<meta name="theme-color" content="#0a0818">`
+  - Optional iOS tags (`apple-touch-icon`, `apple-mobile-web-app-capable`, status-bar style).
+
+## 2. Service Worker
+- Add `/sw.js` that:
+  - Precaches the app shell (HTML, CSS, JS modules).
+  - Uses cache-first for shell assets.
+  - Uses stale-while-revalidate for audio under `/assets/sounds/` (cache on first play, no upfront bulk caching).
+  - Cleans up old caches on `activate` (bump cache name on releases).
+- Register the worker once in `assets/js/app.js` after bootstrap (`navigator.serviceWorker.register("/sw.js")` guarded by feature detection).
+
+## 3. Offline Behavior & Testing
+- Ensure fetch failures (e.g., manifest load) have graceful fallbacks when offline.
+- Document how to clear caches and bump cache keys when deploying new shell versions.
+- Update docs with a PWA section (requirements, testing with Lighthouse/Add to Home Screen).
+- Manual QA checklist:
+  - Install prompt visible on Chrome (desktop/mobile).
+  - App loads offline with cached shell + any previously fetched audio.
+  - Service worker updates after cache version bump.
 # Detailed Plan: Bibliotekspanel (Steg 1)
 
 ## 1. Triggere & Åpning/Lukking

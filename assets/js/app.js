@@ -48,6 +48,7 @@ const libraryState = {
   isOpen: false,
   filterFavoritesOnly: false,
   previewId: null,
+  installPromptEvent: null,
 };
 let previewAudio = null;
 let longPressTimer = null;
@@ -429,6 +430,16 @@ function renderLibraryList() {
       ? "Ingen favoritter merket enda."
       : "Ingen klipp tilgjengelig.";
     elements.libraryList.append(emptyState);
+  }
+  if (libraryState.installPromptEvent && elements.libraryList.childNodes.length) {
+    const installBtn = document.createElement("button");
+    installBtn.className = "install-button";
+    installBtn.type = "button";
+    installBtn.textContent = "Installer BingoBuzz";
+    installBtn.addEventListener("click", () => {
+      void promptInstall();
+    });
+    elements.libraryList.append(installBtn);
   }
   if (elements.regenButton) {
     elements.regenButton.disabled = files.length === 0;
@@ -1022,6 +1033,23 @@ if (typeof window !== "undefined") {
       }
     });
   });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .catch((error) => console.warn("SW registration failed", error));
+  }
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    libraryState.installPromptEvent = event;
+    renderLibraryList();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    libraryState.installPromptEvent = null;
+    renderLibraryList();
+  });
 }
 
 async function bootstrap() {
@@ -1176,4 +1204,19 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", run, { once: true });
 } else {
   run();
+}
+async function promptInstall() {
+  if (!libraryState.installPromptEvent) {
+    return;
+  }
+  try {
+    const promptEvent = libraryState.installPromptEvent;
+    promptEvent.prompt();
+    await promptEvent.userChoice;
+  } catch (error) {
+    console.warn("Install prompt failed", error);
+  } finally {
+    libraryState.installPromptEvent = null;
+    renderLibraryList();
+  }
 }
