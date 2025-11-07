@@ -202,8 +202,7 @@ body.-fading .big-btn-screen::before {
 }
 
 .big-btn.is-playing {
-  animation: pulse-playing 1.6s ease-in-out infinite;
-  box-shadow: none;
+  animation: pulse-playing 1.8s ease-in-out infinite;
 }
 
 .big-btn.is-fading,
@@ -257,6 +256,20 @@ body.-fading .big-btn-screen::before {
   text-align: center;
 }
 
+
+@keyframes pulse-playing {
+  0%,
+  100% {
+    box-shadow:
+      0 18px 50px rgba(0, 0, 0, 0.4),
+      0 0 110px var(--btn-active-glow);
+  }
+  50% {
+    box-shadow:
+      0 28px 70px rgba(0, 0, 0, 0.45),
+      0 0 170px var(--btn-active-glow);
+  }
+}
 
 @keyframes pulse-fading {
   0%,
