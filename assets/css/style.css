@@ -56,8 +56,8 @@ body::after {
 
 .big-btn {
   position: relative;
-  width: min(60vmin, 360px);
-  height: min(60vmin, 360px);
+  width: min(75vmin, 75vw);
+  height: min(75vmin, 75vw);
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -84,7 +84,7 @@ body::after {
 }
 
 .big-btn.is-playing {
-  animation: pulse-play-once 600ms cubic-bezier(.2,.8,.25,1) both;
+  animation: pulse-play-loop 1.6s ease-in-out infinite;
 }
 
 .big-btn.is-fading {
@@ -142,11 +142,13 @@ body::after {
 }
 
 
-
+@keyframes pulse-play-loop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
   50% {
-    box-shadow:
-      0 28px 70px rgba(0, 0, 0, 0.45),
-      0 0 170px var(--btn-active-glow);
+    transform: scale(1.03);
   }
 }
 
@@ -210,9 +212,4 @@ body::after {
   .big-btn.is-fading {
     animation: none;
   }
-}
-
-
-.big-btn.post-bounce {
-  animation: popBack 420ms cubic-bezier(.2,.9,.3,1.4) both;
 }

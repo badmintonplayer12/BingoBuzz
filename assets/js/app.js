@@ -91,6 +91,7 @@ function handlePlaybackEnded({ reason } = {}) {
   if (reason === "cleanup" || reason === "error") {
     return;
   }
+  elements.actionButton?.classList.remove("is-playing");
   if (playlist.isComplete()) {
     updateUi({
       statusText: "Alt spilt i denne økta · Start på nytt",
@@ -195,6 +196,7 @@ function updateButtonColor() {
 
 async function playClipResult(result) {
   if (!result || !result.clip) {
+    elements.actionButton?.classList.remove("is-playing");
     updateUi({
       statusText: "Alt spilt i denne økta · Start på nytt",
       actionLabel: "Alt spilt",
@@ -215,7 +217,6 @@ async function playClipResult(result) {
       showReset: false,
     });
     elements.actionButton?.classList.add("is-playing");
-    setTimeout(() => elements.actionButton?.classList.remove("is-playing"), 600);
 
     await audioEngine.play(result.clip);
     playlist.markSuccess();
@@ -231,6 +232,7 @@ async function playClipResult(result) {
     });
   } catch (error) {
     console.error("playClipResult failed", error);
+    elements.actionButton?.classList.remove("is-playing");
 
     if (error?.name === "NotAllowedError") {
       updateUi({
@@ -282,6 +284,7 @@ async function playNext() {
 
 async function handleActionClick() {
   if (audioEngine.state === "playing") {
+    elements.actionButton?.classList.remove("is-playing");
     updateUi({
       statusText: "Fader ut …",
       actionLabel: "Fader ut …",
