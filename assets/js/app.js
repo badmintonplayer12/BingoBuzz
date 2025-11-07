@@ -52,6 +52,7 @@ function persistSession({ index, order } = {}) {
 }
 
 function resetSession() {
+  audioEngine.cancelPrepare?.();
   audioEngine.stopImmediate();
   const snapshot = playlist.reset();
   sessionRef = {
@@ -69,6 +70,21 @@ function resetSession() {
     buttonState: "idle",
     showReset: false,
   });
+  prefetchUpcomingClip();
+}
+
+function prefetchUpcomingClip() {
+  if (typeof audioEngine.prepare !== "function") {
+    return;
+  }
+  const upcoming = playlist.peek?.();
+  if (!upcoming) {
+    audioEngine.cancelPrepare?.();
+    return;
+  }
+  audioEngine
+    .prepare(upcoming)
+    ?.catch((error) => console.warn("Prefetch failed", error));
 }
 
 function handlePlaybackEnded({ reason } = {}) {
@@ -84,6 +100,7 @@ function handlePlaybackEnded({ reason } = {}) {
       buttonState: "idle",
       showReset: true,
     });
+    audioEngine.cancelPrepare?.();
   } else {
     updateUi({
       statusText: `Klar · #${playlist.cursor + 1} av ${playlist.size} gjenstår`,
@@ -93,6 +110,7 @@ function handlePlaybackEnded({ reason } = {}) {
       buttonState: "idle",
       showReset: false,
     });
+    prefetchUpcomingClip();
   }
 }
 
@@ -200,6 +218,7 @@ async function playClipResult(result) {
     await audioEngine.play(result.clip);
     playlist.markSuccess();
     persistSession({ index: playlist.cursor });
+    prefetchUpcomingClip();
 
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
@@ -269,8 +288,12 @@ async function handleActionClick() {
       buttonState: "fading",
       showReset: false,
     });
+    elements.actionButton?.style.setProperty("--fade-ms", `${STOP_FADE_MS}ms`);
     try {
       await audioEngine.fadeOut(STOP_FADE_MS);
+      elements.actionButton?.classList.add("post-bounce");
+      setTimeout(() => elements.actionButton?.classList.remove("post-bounce"), 420);
+      elements.actionButton?.style.removeProperty("--fade-ms");
     } catch (error) {
       console.error("Fade out failed", error);
       updateUi({
@@ -280,6 +303,8 @@ async function handleActionClick() {
         actionBusy: false,
         buttonState: "idle",
       });
+    } finally {
+      elements.actionButton?.style.removeProperty("--fade-ms");
     }
     return;
   }
@@ -477,6 +502,8 @@ async function bootstrap() {
       showReset: false,
     });
   }
+
+  prefetchUpcomingClip();
 }
 
 const run = () => {

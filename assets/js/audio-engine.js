@@ -95,6 +95,12 @@ export function createAudioEngine(options = {}) {
     listeners: {
       ended: new Set(),
     },
+    prefetch: {
+      clip: null,
+      buffer: null,
+      controller: null,
+      promise: null,
+    },
   };
 
   function emit(event, payload) {
@@ -150,27 +156,7 @@ export function createAudioEngine(options = {}) {
       try {
         const arrayBuffer = await fetchArrayBuffer(url, controller.signal);
         const audioBuffer = await context.decodeAudioData(arrayBuffer.slice(0));
-        const source = context.createBufferSource();
-        const gainNode = createGainWithFade(context);
-
-        source.buffer = audioBuffer;
-        source.connect(gainNode).connect(context.destination);
-        if (context.state === "suspended") {
-          await context.resume();
-        }
-        source.start();
-
-        state.currentSource = source;
-        state.gainNode = gainNode;
-        state.currentClip = clip;
-
-        source.onended = () => {
-          if (state.status !== STATES.fading) {
-            cleanupPlayback({ notify: true, reason: "ended" });
-            setStatus(STATES.idle);
-          }
-        };
-
+        await startWebAudioBuffer(audioBuffer, clip);
         return;
       } catch (error) {
         lastError = error;
@@ -252,6 +238,47 @@ export function createAudioEngine(options = {}) {
     }
   }
 
+  function clearPrefetch() {
+    if (state.prefetch.controller) {
+      state.prefetch.controller.abort();
+    }
+    state.prefetch = {
+      clip: null,
+      buffer: null,
+      controller: null,
+      promise: null,
+    };
+  }
+
+  async function startWebAudioBuffer(buffer, clip) {
+    const context = ensureContext();
+    if (!context) {
+      throw new Error("Web Audio not supported.");
+    }
+
+    const source = context.createBufferSource();
+    const gainNode = createGainWithFade(context);
+
+    source.buffer = buffer;
+    source.connect(gainNode).connect(context.destination);
+    source.start();
+
+    state.currentSource = source;
+    state.gainNode = gainNode;
+    state.currentClip = clip;
+
+    source.onended = () => {
+      if (state.status !== STATES.fading) {
+        cleanupPlayback({ notify: true, reason: "ended" });
+        setStatus(STATES.idle);
+      }
+    };
+
+    if (context.state === "suspended") {
+      await context.resume();
+    }
+  }
+
   async function play(clip) {
     if (state.status === STATES.playing || state.status === STATES.fading) {
       throw new Error("audio: busy");
@@ -264,13 +291,25 @@ export function createAudioEngine(options = {}) {
       throw new Error("audio: no source urls");
     }
 
+    const prefetchedBuffer =
+      supportsWebAudio &&
+      state.prefetch.clip &&
+      state.prefetch.clip.id === clip.id
+        ? state.prefetch.buffer
+        : null;
+
     cleanupPlayback();
     setStatus(STATES.playing);
     state.lastError = null;
     try {
-      if (supportsWebAudio) {
+      if (supportsWebAudio && prefetchedBuffer) {
+        await startWebAudioBuffer(prefetchedBuffer, clip);
+        clearPrefetch();
+      } else if (supportsWebAudio) {
+        clearPrefetch();
         await decodeAndPlayWebAudio(clip, urls);
       } else {
+        clearPrefetch();
         await playWithHtmlAudio(clip, urls);
       }
       setStatus(STATES.playing);
@@ -338,6 +377,78 @@ export function createAudioEngine(options = {}) {
     }
   }
 
+  function prepare(clip) {
+    if (!supportsWebAudio) {
+      return Promise.resolve();
+    }
+    if (!clip) {
+      clearPrefetch();
+      return Promise.resolve();
+    }
+    if (
+      state.prefetch.clip &&
+      state.prefetch.clip.id === clip.id &&
+      state.prefetch.buffer
+    ) {
+      return state.prefetch.promise ?? Promise.resolve();
+    }
+
+    clearPrefetch();
+    const urls = pickSourceUrls(clip, state.basePath, state.formats);
+    if (!urls.length) {
+      return Promise.resolve();
+    }
+
+    const controller = new AbortController();
+    const prefetchState = {
+      clip,
+      buffer: null,
+      controller,
+      promise: null,
+    };
+    state.prefetch = prefetchState;
+
+    const promise = (async () => {
+      const context = ensureContext();
+      if (!context) {
+        return;
+      }
+      let lastError = null;
+      for (const url of urls) {
+        try {
+          const arrayBuffer = await fetchArrayBuffer(url, controller.signal);
+          const audioBuffer = await context.decodeAudioData(arrayBuffer.slice(0));
+          if (controller.signal.aborted || state.prefetch !== prefetchState) {
+            return;
+          }
+          prefetchState.buffer = audioBuffer;
+          return;
+        } catch (error) {
+          if (controller.signal.aborted) {
+            return;
+          }
+          lastError = error;
+        }
+      }
+      throw lastError ?? new Error("audio: prefetch failed");
+    })().catch((error) => {
+      if (controller.signal.aborted) {
+        return;
+      }
+      console.warn("audio: prefetch failed", error);
+      if (state.prefetch === prefetchState) {
+        clearPrefetch();
+      }
+    });
+
+    prefetchState.promise = promise;
+    return promise;
+  }
+
+  function cancelPrepare() {
+    clearPrefetch();
+  }
+
   return {
     get state() {
       return state.status;
@@ -353,6 +464,8 @@ export function createAudioEngine(options = {}) {
     },
     on,
     configure,
+    prepare,
+    cancelPrepare,
     play,
     fadeOut,
     stopImmediate,

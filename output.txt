@@ -97,9 +97,9 @@ File End
 assets\css\style.css
 File type: .css
 :root {
-  --bg-start: #221c42;
-  --bg-mid: #0e0c1f;
-  --bg-end: #050512;
+  --bg-start: #352b6b;
+  --bg-mid: #1b1638;
+  --bg-end: #0a0818;
   --bg-tint-hue: 210;
   --btn-color-start: #ffe066;
   --btn-color-mid: #ffb347;
@@ -129,11 +129,11 @@ body {
   font-family: var(--font-stack);
   background:
     radial-gradient(circle at 42% 38%, var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%),
-    radial-gradient(120vmax 120vmax at 60% 20%, rgba(255, 255, 255, 0.05), transparent 60%),
-    radial-gradient(120vmax 120vmax at 50% 80%, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.7));
+    radial-gradient(150vmax 150vmax at 65% 25%, rgba(255, 255, 255, 0.07), transparent 70%),
+    radial-gradient(120vmax 120vmax at 50% 80%, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.55));
   background-attachment: fixed;
   background-size: 200% 200%, 200% 200%, 100% 100%;
-  animation: bg-shift 18s ease-in-out infinite alternate;
+  animation: bg-shift 22s ease-in-out infinite alternate;
   color: #fff;
   display: grid;
   place-items: center;
@@ -142,18 +142,18 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: -20vmax;
+  inset: -25vmax;
   z-index: 0;
   pointer-events: none;
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 50%,
-    hsla(var(--theme-hue, 200), 75%, 50%, 0.22) 0%,
-    hsla(var(--theme-hue, 200), 70%, 40%, 0.14) 30%,
-    hsla(var(--theme-hue, 200), 65%, 30%, 0.06) 60%,
+    hsla(var(--theme-hue, 200), 75%, 50%, 0.16) 0%,
+    hsla(var(--theme-hue, 200), 70%, 40%, 0.06) 40%,
     transparent 78%
   );
-  opacity: var(--aura-opacity, 0);
+  filter: blur(110px);
+  opacity: var(--aura-opacity, 0.45);
   transform: scale(var(--aura-scale, 1));
   transition: opacity 420ms ease, transform 800ms ease;
 }
@@ -166,8 +166,8 @@ body::after {
   z-index: 0;
   background: radial-gradient(
     circle at 40% 35%,
-    hsla(var(--bg-tint-hue), 30%, 25%, 0.1),
-    hsla(var(--bg-tint-hue), 25%, 10%, 0) 70%
+    hsla(var(--bg-tint-hue), 35%, 30%, 0.18),
+    hsla(var(--bg-tint-hue), 30%, 15%, 0) 70%
   );
   mix-blend-mode: screen;
 }
@@ -192,68 +192,110 @@ body.-fading::before {
   z-index: 1;
 }
 
+.big-btn-screen::before {
+  content: "";
+  position: fixed;
+  inset: -10vmax;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 30% 40%, hsla(var(--theme-hue, 210), 80%, 55%, 0.25) 0%, transparent 60%),
+    radial-gradient(circle at 70% 60%, hsla(calc(var(--theme-hue, 210) + 60), 80%, 45%, 0.22) 0%, transparent 70%),
+    radial-gradient(circle at 50% 90%, hsla(calc(var(--theme-hue, 210) + 120), 80%, 40%, 0.18) 0%, transparent 75%);
+  background-size: 160% 160%;
+  animation: nebula-move 40s ease-in-out infinite alternate;
+  filter: blur(60px) saturate(120%);
+}
+
+body.-playing .big-btn-screen::before {
+  opacity: 0.3;
+  animation-duration: 28s;
+  filter: blur(50px) saturate(140%);
+}
+
+body.-fading .big-btn-screen::before {
+  opacity: 0.26;
+  animation-duration: 22s;
+}
+
+
 .big-btn {
   position: relative;
-  width: min(75vmin, 520px);
-  height: min(75vmin, 520px);
+  width: min(85vmin, 620px);
+  height: min(85vmin, 620px);
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background: radial-gradient(circle at 30% 30%, var(--btn-color-start) 0%, var(--btn-color-mid) 55%, var(--btn-color-end) 100%);
+  -webkit-tap-highlight-color: transparent;
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--btn-color-start) 0%,
+    var(--btn-color-mid) 55%,
+    var(--btn-color-end) 100%
+  );
   box-shadow:
-    0 0 40px var(--btn-idle-glow),
-    inset 0 0 24px hsla(var(--theme-hue, 200), 40%, 88%, 0.22);
+    0 22px 60px rgba(0, 0, 0, 0.55),
+    0 0 150px var(--btn-idle-glow),
+    inset 0 0 36px hsla(var(--theme-hue, 200), 40%, 88%, 0.18),
+    inset 0 -18px 30px rgba(0, 0, 0, 0.35);
   transition:
-    transform 200ms ease,
-    box-shadow 260ms ease,
-    filter 260ms ease,
+    transform 140ms ease,
+    box-shadow 220ms ease,
     background 1200ms ease;
   display: grid;
   place-items: center;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+  z-index: 1;
 }
 
 .big-btn::before {
   content: "";
   position: absolute;
-  inset: 12%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 65% 35%,
-    hsla(var(--theme-hue, 200), 90%, 85%, 0.55) 0%,
-    hsla(var(--theme-hue, 200), 90%, 70%, 0.1) 65%,
-    transparent 100%
-  );
-  opacity: 0.9;
-  transition: opacity 300ms ease, filter 300ms ease;
+  inset: 12% 12% 50% 12%;
+  border-radius: 50% 50% 46% 46% / 60% 60% 40% 40%;
+  background: radial-gradient(120% 100% at 60% 20%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.08) 55%, transparent 70%);
+  filter: saturate(1.05);
+  pointer-events: none;
 }
 
 .big-btn::after {
   content: "";
   position: absolute;
-  inset: -12%;
+  inset: -10%;
   border-radius: 50%;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(
-    circle,
-    hsla(var(--theme-hue, 200), 90%, 65%, 0.35) 0%,
-    hsla(var(--theme-hue, 200), 90%, 50%, 0) 60%
-  );
-  transform: scale(0.45);
-  transition: transform 450ms ease, opacity 450ms ease;
+  background: radial-gradient(circle, hsla(var(--theme-hue, 200), 90%, 65%, 0.35) 0%, hsla(var(--theme-hue, 200), 90%, 50%, 0) 60%);
+  transform: scale(0.6);
+  transition: transform 420ms ease, opacity 420ms ease;
+}
+
+.big-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.6),
+    0 0 150px var(--btn-active-glow),
+    inset 0 0 44px rgba(255, 255, 255, 0.26),
+    inset 0 -20px 36px rgba(0, 0, 0, 0.35);
 }
 
 .big-btn:active {
-  transform: scale(0.95);
+  transform: translateY(6px) scale(0.98);
   box-shadow:
-    0 0 60px rgba(255, 255, 255, 0.65),
-    inset 0 0 30px hsla(var(--theme-hue, 200), 40%, 88%, 0.25);
+    0 14px 36px rgba(0, 0, 0, 0.65),
+    0 0 220px var(--btn-fade-glow),
+    inset 0 0 30px rgba(255, 255, 255, 0.22),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.5);
 }
 
 .big-btn:active::after {
   opacity: 0.9;
-  transform: scale(2.2);
+  transform: scale(1.8);
 }
+
 
 .big-btn:focus-visible {
   outline: none;
@@ -266,15 +308,19 @@ body.-fading::before {
 .big-btn.is-playing {
   animation: pulse-playing 1.6s ease-in-out infinite;
   box-shadow:
-    0 0 55px var(--btn-active-glow),
-    inset 0 0 32px hsla(var(--theme-hue, 200), 50%, 78%, 0.28);
+    0 24px 68px rgba(0, 0, 0, 0.55),
+    0 0 160px var(--btn-active-glow),
+    inset 0 0 40px hsla(var(--theme-hue, 200), 55%, 82%, 0.32),
+    inset 0 -18px 30px rgba(0, 0, 0, 0.3);
 }
 
 .big-btn.is-fading {
   animation: pulse-fading 1.2s ease-in-out infinite;
   box-shadow:
-    0 0 60px var(--btn-fade-glow),
-    inset 0 0 36px hsla(var(--theme-hue, 200), 55%, 82%, 0.3);
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 120px var(--btn-fade-glow),
+    inset 0 0 34px hsla(var(--theme-hue, 200), 60%, 75%, 0.28),
+    inset 0 -16px 26px rgba(0, 0, 0, 0.32);
   filter: none;
 }
 
@@ -334,13 +380,17 @@ body.-fading::before {
   0%,
   100% {
     box-shadow:
-      0 0 55px var(--btn-active-glow),
-      inset 0 0 46px rgba(255, 255, 255, 0.45);
+      0 24px 68px rgba(0, 0, 0, 0.55),
+      0 0 160px var(--btn-active-glow),
+      inset 0 0 40px hsla(var(--theme-hue, 200), 55%, 82%, 0.32),
+      inset 0 -18px 30px rgba(0, 0, 0, 0.3);
   }
   50% {
     box-shadow:
-      0 0 90px rgba(255, 255, 200, 0.95),
-      inset 0 0 52px rgba(255, 255, 255, 0.55);
+      0 28px 80px rgba(0, 0, 0, 0.5),
+      0 0 220px hsla(var(--theme-hue, 200), 90%, 60%, 0.85),
+      inset 0 0 48px hsla(var(--theme-hue, 200), 60%, 84%, 0.36),
+      inset 0 -22px 34px rgba(0, 0, 0, 0.28);
   }
 }
 
@@ -348,13 +398,17 @@ body.-fading::before {
   0%,
   100% {
     box-shadow:
-      0 0 60px var(--btn-fade-glow),
-      inset 0 0 50px rgba(200, 230, 255, 0.55);
+      0 20px 60px rgba(0, 0, 0, 0.5),
+      0 0 120px var(--btn-fade-glow),
+      inset 0 0 34px hsla(var(--theme-hue, 200), 60%, 75%, 0.28),
+      inset 0 -16px 26px rgba(0, 0, 0, 0.32);
   }
   50% {
     box-shadow:
-      0 0 95px rgba(140, 210, 255, 0.95),
-      inset 0 0 60px rgba(200, 240, 255, 0.7);
+      0 24px 70px rgba(0, 0, 0, 0.45),
+      0 0 160px hsla(var(--theme-hue, 200), 70%, 68%, 0.75),
+      inset 0 0 46px hsla(var(--theme-hue, 200), 65%, 78%, 0.34),
+      inset 0 -18px 28px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -367,6 +421,21 @@ body.-fading::before {
   }
   100% {
     background-position: 50% 50%;
+  }
+}
+
+@keyframes nebula-move {
+  0% {
+    background-position: 40% 60%, 60% 40%, 50% 80%;
+    transform: scale(1);
+  }
+  50% {
+    background-position: 60% 40%, 40% 60%, 48% 85%;
+    transform: scale(1.05);
+  }
+  100% {
+    background-position: 50% 50%, 50% 50%, 50% 90%;
+    transform: scale(1);
   }
 }
 
@@ -458,6 +527,7 @@ function persistSession({ index, order } = {}) {
 }
 
 function resetSession() {
+  audioEngine.cancelPrepare?.();
   audioEngine.stopImmediate();
   const snapshot = playlist.reset();
   sessionRef = {
@@ -475,6 +545,21 @@ function resetSession() {
     buttonState: "idle",
     showReset: false,
   });
+  prefetchUpcomingClip();
+}
+
+function prefetchUpcomingClip() {
+  if (typeof audioEngine.prepare !== "function") {
+    return;
+  }
+  const upcoming = playlist.peek?.();
+  if (!upcoming) {
+    audioEngine.cancelPrepare?.();
+    return;
+  }
+  audioEngine
+    .prepare(upcoming)
+    ?.catch((error) => console.warn("Prefetch failed", error));
 }
 
 function handlePlaybackEnded({ reason } = {}) {
@@ -490,6 +575,7 @@ function handlePlaybackEnded({ reason } = {}) {
       buttonState: "idle",
       showReset: true,
     });
+    audioEngine.cancelPrepare?.();
   } else {
     updateUi({
       statusText: `Klar · #${playlist.cursor + 1} av ${playlist.size} gjenstår`,
@@ -499,6 +585,7 @@ function handlePlaybackEnded({ reason } = {}) {
       buttonState: "idle",
       showReset: false,
     });
+    prefetchUpcomingClip();
   }
 }
 
@@ -606,6 +693,7 @@ async function playClipResult(result) {
     await audioEngine.play(result.clip);
     playlist.markSuccess();
     persistSession({ index: playlist.cursor });
+    prefetchUpcomingClip();
 
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
@@ -883,6 +971,8 @@ async function bootstrap() {
       showReset: false,
     });
   }
+
+  prefetchUpcomingClip();
 }
 
 const run = () => {
@@ -1050,6 +1140,12 @@ export function createAudioEngine(options = {}) {
     listeners: {
       ended: new Set(),
     },
+    prefetch: {
+      clip: null,
+      buffer: null,
+      controller: null,
+      promise: null,
+    },
   };
 
   function emit(event, payload) {
@@ -1105,27 +1201,7 @@ export function createAudioEngine(options = {}) {
       try {
         const arrayBuffer = await fetchArrayBuffer(url, controller.signal);
         const audioBuffer = await context.decodeAudioData(arrayBuffer.slice(0));
-        const source = context.createBufferSource();
-        const gainNode = createGainWithFade(context);
-
-        source.buffer = audioBuffer;
-        source.connect(gainNode).connect(context.destination);
-        if (context.state === "suspended") {
-          await context.resume();
-        }
-        source.start();
-
-        state.currentSource = source;
-        state.gainNode = gainNode;
-        state.currentClip = clip;
-
-        source.onended = () => {
-          if (state.status !== STATES.fading) {
-            cleanupPlayback({ notify: true, reason: "ended" });
-            setStatus(STATES.idle);
-          }
-        };
-
+        await startWebAudioBuffer(audioBuffer, clip);
         return;
       } catch (error) {
         lastError = error;
@@ -1207,6 +1283,47 @@ export function createAudioEngine(options = {}) {
     }
   }
 
+  function clearPrefetch() {
+    if (state.prefetch.controller) {
+      state.prefetch.controller.abort();
+    }
+    state.prefetch = {
+      clip: null,
+      buffer: null,
+      controller: null,
+      promise: null,
+    };
+  }
+
+  async function startWebAudioBuffer(buffer, clip) {
+    const context = ensureContext();
+    if (!context) {
+      throw new Error("Web Audio not supported.");
+    }
+
+    const source = context.createBufferSource();
+    const gainNode = createGainWithFade(context);
+
+    source.buffer = buffer;
+    source.connect(gainNode).connect(context.destination);
+    source.start();
+
+    state.currentSource = source;
+    state.gainNode = gainNode;
+    state.currentClip = clip;
+
+    source.onended = () => {
+      if (state.status !== STATES.fading) {
+        cleanupPlayback({ notify: true, reason: "ended" });
+        setStatus(STATES.idle);
+      }
+    };
+
+    if (context.state === "suspended") {
+      await context.resume();
+    }
+  }
+
   async function play(clip) {
     if (state.status === STATES.playing || state.status === STATES.fading) {
       throw new Error("audio: busy");
@@ -1219,13 +1336,25 @@ export function createAudioEngine(options = {}) {
       throw new Error("audio: no source urls");
     }
 
+    const prefetchedBuffer =
+      supportsWebAudio &&
+      state.prefetch.clip &&
+      state.prefetch.clip.id === clip.id
+        ? state.prefetch.buffer
+        : null;
+
     cleanupPlayback();
     setStatus(STATES.playing);
     state.lastError = null;
     try {
-      if (supportsWebAudio) {
+      if (supportsWebAudio && prefetchedBuffer) {
+        await startWebAudioBuffer(prefetchedBuffer, clip);
+        clearPrefetch();
+      } else if (supportsWebAudio) {
+        clearPrefetch();
         await decodeAndPlayWebAudio(clip, urls);
       } else {
+        clearPrefetch();
         await playWithHtmlAudio(clip, urls);
       }
       setStatus(STATES.playing);
@@ -1293,6 +1422,78 @@ export function createAudioEngine(options = {}) {
     }
   }
 
+  function prepare(clip) {
+    if (!supportsWebAudio) {
+      return Promise.resolve();
+    }
+    if (!clip) {
+      clearPrefetch();
+      return Promise.resolve();
+    }
+    if (
+      state.prefetch.clip &&
+      state.prefetch.clip.id === clip.id &&
+      state.prefetch.buffer
+    ) {
+      return state.prefetch.promise ?? Promise.resolve();
+    }
+
+    clearPrefetch();
+    const urls = pickSourceUrls(clip, state.basePath, state.formats);
+    if (!urls.length) {
+      return Promise.resolve();
+    }
+
+    const controller = new AbortController();
+    const prefetchState = {
+      clip,
+      buffer: null,
+      controller,
+      promise: null,
+    };
+    state.prefetch = prefetchState;
+
+    const promise = (async () => {
+      const context = ensureContext();
+      if (!context) {
+        return;
+      }
+      let lastError = null;
+      for (const url of urls) {
+        try {
+          const arrayBuffer = await fetchArrayBuffer(url, controller.signal);
+          const audioBuffer = await context.decodeAudioData(arrayBuffer.slice(0));
+          if (controller.signal.aborted || state.prefetch !== prefetchState) {
+            return;
+          }
+          prefetchState.buffer = audioBuffer;
+          return;
+        } catch (error) {
+          if (controller.signal.aborted) {
+            return;
+          }
+          lastError = error;
+        }
+      }
+      throw lastError ?? new Error("audio: prefetch failed");
+    })().catch((error) => {
+      if (controller.signal.aborted) {
+        return;
+      }
+      console.warn("audio: prefetch failed", error);
+      if (state.prefetch === prefetchState) {
+        clearPrefetch();
+      }
+    });
+
+    prefetchState.promise = promise;
+    return promise;
+  }
+
+  function cancelPrepare() {
+    clearPrefetch();
+  }
+
   return {
     get state() {
       return state.status;
@@ -1308,6 +1509,8 @@ export function createAudioEngine(options = {}) {
     },
     on,
     configure,
+    prepare,
+    cancelPrepare,
     play,
     fadeOut,
     stopImmediate,
