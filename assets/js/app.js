@@ -200,13 +200,13 @@ function updateUi({
 
   if (typeof buttonState === "string" && typeof document !== "undefined") {
     if (buttonState === "playing") {
-      document.body.classList.add("-playing");
+      document.body.classList.add("-playing", "-ambient");
       document.body.classList.remove("-fading");
     } else if (buttonState === "fading") {
       document.body.classList.add("-fading");
-      document.body.classList.remove("-playing");
+      document.body.classList.remove("-playing", "-ambient");
     } else {
-      document.body.classList.remove("-playing", "-fading");
+      document.body.classList.remove("-playing", "-fading", "-ambient");
     }
   }
 }
@@ -795,6 +795,7 @@ async function playNext() {
   const nextResult = playlist.next();
   if (nextResult?.clip) {
     updateButtonColor();
+    document.body.classList.add("-ambient");
   }
   await playClipResult(nextResult);
 }

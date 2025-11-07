@@ -38,16 +38,22 @@ body {
   height: 100%;
   width: 100%;
   font-family: var(--font-stack);
-  background:
-    radial-gradient(circle at var(--bg-radial-1-pos), var(--bg-radial-1) 0%, rgba(10, 5, 21, 0.92) 55%),
-    radial-gradient(circle at var(--bg-radial-2-pos), var(--bg-radial-2) 0%, rgba(5, 3, 15, 0.9) 60%),
-    linear-gradient(var(--bg-grad-angle), var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+  background: #020203;
   color: #fff;
   display: grid;
   place-items: center;
   transition:
-    background 1.2s ease,
-    background-position 1.2s ease;
+    background 0.7s ease;
+}
+
+body.-ambient {
+  background:
+    radial-gradient(circle at var(--bg-radial-1-pos), var(--bg-radial-1) 0%, rgba(10, 5, 21, 0.92) 55%),
+    radial-gradient(circle at var(--bg-radial-2-pos), var(--bg-radial-2) 0%, rgba(5, 3, 15, 0.9) 60%),
+    linear-gradient(var(--bg-grad-angle), var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+  transition:
+    background 1s ease,
+    background-position 1s ease;
 }
 
 body::before,
