@@ -177,7 +177,6 @@ body.-fading .big-btn-screen::before {
 
 
 .big-btn:hover {
-  transform: translateY(-2px);
   box-shadow:
     0 28px 70px rgba(0, 0, 0, 0.6),
     inset 0 0 44px rgba(255, 255, 255, 0.26),

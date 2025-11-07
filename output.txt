@@ -237,7 +237,6 @@ body.-fading .big-btn-screen::before {
   );
   box-shadow:
     0 22px 60px rgba(0, 0, 0, 0.55),
-    0 0 150px var(--btn-idle-glow),
     inset 0 0 36px hsla(var(--theme-hue, 200), 40%, 88%, 0.18),
     inset 0 -18px 30px rgba(0, 0, 0, 0.35);
   transition:
@@ -273,11 +272,11 @@ body.-fading .big-btn-screen::before {
   transition: transform 420ms ease, opacity 420ms ease;
 }
 
+
+
 .big-btn:hover {
-  transform: translateY(-2px) scale(1.02);
   box-shadow:
     0 28px 70px rgba(0, 0, 0, 0.6),
-    0 0 150px var(--btn-active-glow),
     inset 0 0 44px rgba(255, 255, 255, 0.26),
     inset 0 -20px 36px rgba(0, 0, 0, 0.35);
 }
@@ -286,7 +285,6 @@ body.-fading .big-btn-screen::before {
   transform: translateY(6px) scale(0.98);
   box-shadow:
     0 14px 36px rgba(0, 0, 0, 0.65),
-    0 0 220px var(--btn-fade-glow),
     inset 0 0 30px rgba(255, 255, 255, 0.22),
     inset 0 -8px 18px rgba(0, 0, 0, 0.5);
 }
@@ -314,23 +312,11 @@ body.-fading .big-btn-screen::before {
     inset 0 -18px 30px rgba(0, 0, 0, 0.3);
 }
 
-.big-btn.is-fading {
-  animation: pulse-fading 1.2s ease-in-out infinite;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 120px var(--btn-fade-glow),
-    inset 0 0 34px hsla(var(--theme-hue, 200), 60%, 75%, 0.28),
-    inset 0 -16px 26px rgba(0, 0, 0, 0.32);
-  filter: none;
-}
-
+.big-btn.is-fading,
 .big-btn[disabled] {
   cursor: not-allowed;
-  filter: grayscale(25%);
-  box-shadow:
-    0 0 20px rgba(255, 255, 255, 0.2),
-    inset 0 0 25px rgba(255, 255, 255, 0.2);
-  animation: none;
+  transform: translateY(16px) scale(0.86);
+  transition: transform calc(var(--fade-ms, 1200ms) * 1.05) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .reset-banner {
@@ -463,6 +449,23 @@ body.-fading .big-btn-screen::before {
   .big-btn.is-fading {
     animation: none;
   }
+}
+
+
+@keyframes popBack {
+  0% {
+    transform: translateY(16px) scale(0.86);
+  }
+  55% {
+    transform: translateY(-3px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.big-btn.post-bounce {
+  animation: popBack 420ms cubic-bezier(.2,.9,.3,1.4) both;
 }
 
 
@@ -763,8 +766,12 @@ async function handleActionClick() {
       buttonState: "fading",
       showReset: false,
     });
+    elements.actionButton?.style.setProperty("--fade-ms", `${STOP_FADE_MS}ms`);
     try {
       await audioEngine.fadeOut(STOP_FADE_MS);
+      elements.actionButton?.classList.add("post-bounce");
+      setTimeout(() => elements.actionButton?.classList.remove("post-bounce"), 420);
+      elements.actionButton?.style.removeProperty("--fade-ms");
     } catch (error) {
       console.error("Fade out failed", error);
       updateUi({
@@ -774,6 +781,8 @@ async function handleActionClick() {
         actionBusy: false,
         buttonState: "idle",
       });
+    } finally {
+      elements.actionButton?.style.removeProperty("--fade-ms");
     }
     return;
   }
