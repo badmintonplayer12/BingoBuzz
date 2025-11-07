@@ -203,11 +203,7 @@ body.-fading .big-btn-screen::before {
 
 .big-btn.is-playing {
   animation: pulse-playing 1.6s ease-in-out infinite;
-  box-shadow:
-    0 24px 68px rgba(0, 0, 0, 0.55),
-    0 0 160px var(--btn-active-glow),
-    inset 0 0 40px hsla(var(--theme-hue, 200), 55%, 82%, 0.32),
-    inset 0 -18px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
 }
 
 .big-btn.is-fading,
@@ -215,6 +211,7 @@ body.-fading .big-btn-screen::before {
   cursor: not-allowed;
   transform: translateY(16px) scale(0.86);
   transition: transform calc(var(--fade-ms, 1200ms) * 1.05) cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none;
 }
 
 .reset-banner {
@@ -260,23 +257,6 @@ body.-fading .big-btn-screen::before {
   text-align: center;
 }
 
-@keyframes pulse-playing {
-  0%,
-  100% {
-    box-shadow:
-      0 24px 68px rgba(0, 0, 0, 0.55),
-      0 0 160px var(--btn-active-glow),
-      inset 0 0 40px hsla(var(--theme-hue, 200), 55%, 82%, 0.32),
-      inset 0 -18px 30px rgba(0, 0, 0, 0.3);
-  }
-  50% {
-    box-shadow:
-      0 28px 80px rgba(0, 0, 0, 0.5),
-      0 0 220px hsla(var(--theme-hue, 200), 90%, 60%, 0.85),
-      inset 0 0 48px hsla(var(--theme-hue, 200), 60%, 84%, 0.36),
-      inset 0 -22px 34px rgba(0, 0, 0, 0.28);
-  }
-}
 
 @keyframes pulse-fading {
   0%,
