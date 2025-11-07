@@ -303,7 +303,13 @@ function buildPreviewSrc(file) {
   return `${base}/${root}.${formats[0]}`;
 }
 
-function handlePreviewClick(fileId) {
+function ensureMainPlaybackIdle() {
+  if (audioEngine.state === "playing" || audioEngine.state === "fading") {
+    audioEngine.stopImmediate();
+  }
+}
+
+async function handlePreviewClick(fileId) {
   if (!manifestRef) {
     return;
   }
@@ -320,6 +326,7 @@ function handlePreviewClick(fileId) {
     return;
   }
   stopPreviewPlayback();
+  ensureMainPlaybackIdle();
   previewAudio = new Audio(src);
   libraryState.previewId = fileId;
   previewAudio.volume = 1;
@@ -888,7 +895,7 @@ function bindUi() {
     if (previewBtn && previewBtn instanceof HTMLButtonElement) {
       const fileId = previewBtn.dataset.fileId;
       if (fileId) {
-        handlePreviewClick(fileId);
+        void handlePreviewClick(fileId);
       }
       return;
     }
