@@ -49,6 +49,8 @@ const libraryState = {
   filterFavoritesOnly: false,
   previewId: null,
   installPromptEvent: null,
+  isStandalone: false,
+  canShare: false,
 };
 let previewAudio = null;
 let longPressTimer = null;
@@ -66,6 +68,14 @@ function humanizeClipId(id) {
 function getDisplayName(file) {
   if (!file) return "";
   return file.display ?? humanizeClipId(file.id);
+}
+
+function updateStandaloneState() {
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    (window.navigator.standalone ?? false);
+  libraryState.isStandalone = isStandalone;
+  libraryState.canShare = typeof navigator.share === "function";
 }
 
 function clearLongPressTimer() {
@@ -431,15 +441,30 @@ function renderLibraryList() {
       : "Ingen klipp tilgjengelig.";
     elements.libraryList.append(emptyState);
   }
-  if (libraryState.installPromptEvent && elements.libraryList.childNodes.length) {
-    const installBtn = document.createElement("button");
-    installBtn.className = "install-button";
-    installBtn.type = "button";
-    installBtn.textContent = "Installer BingoBuzz";
-    installBtn.addEventListener("click", () => {
-      void promptInstall();
-    });
-    elements.libraryList.append(installBtn);
+  const needsInstallButton = Boolean(libraryState.installPromptEvent);
+  const canShowShareButton =
+    libraryState.isStandalone && (libraryState.canShare || navigator.clipboard);
+
+  if (elements.libraryList.childNodes.length) {
+    if (needsInstallButton) {
+      const installBtn = document.createElement("button");
+      installBtn.className = "library-cta-button";
+      installBtn.type = "button";
+      installBtn.textContent = "Installer BingoBuzz";
+      installBtn.addEventListener("click", () => {
+        void promptInstall();
+      });
+      elements.libraryList.append(installBtn);
+    } else if (canShowShareButton) {
+      const shareBtn = document.createElement("button");
+      shareBtn.className = "library-cta-button";
+      shareBtn.type = "button";
+      shareBtn.textContent = "Del BingoBuzz";
+      shareBtn.addEventListener("click", () => {
+        void handleShare();
+      });
+      elements.libraryList.append(shareBtn);
+    }
   }
   if (elements.regenButton) {
     elements.regenButton.disabled = files.length === 0;
@@ -1048,6 +1073,13 @@ if (typeof window !== "undefined") {
 
   window.addEventListener("appinstalled", () => {
     libraryState.installPromptEvent = null;
+    updateStandaloneState();
+    renderLibraryList();
+  });
+
+  updateStandaloneState();
+  window.matchMedia("(display-mode: standalone)").addEventListener("change", () => {
+    updateStandaloneState();
     renderLibraryList();
   });
 }
@@ -1219,4 +1251,30 @@ async function promptInstall() {
     libraryState.installPromptEvent = null;
     renderLibraryList();
   }
+}
+
+async function handleShare() {
+  const shareData = {
+    title: "BingoBuzz",
+    text: "Installer BingoBuzz og spill neste bingo-lyd med ett trykk!",
+    url: window.location.href,
+  };
+  if (libraryState.canShare && typeof navigator.share === "function") {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (error) {
+      console.warn("Share cancelled or failed", error);
+    }
+  }
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+      setLibraryStatus("Lenke kopiert til utklippstavlen.");
+      return;
+    } catch (error) {
+      console.warn("Clipboard copy failed", error);
+    }
+  }
+  setLibraryStatus("Deling ikke støttet her – kopier URL manuelt.");
 }
