@@ -65,3 +65,9 @@ async function handleAudioRequest(request) {
 
   return cachedResponse || fetchPromise;
 }
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});

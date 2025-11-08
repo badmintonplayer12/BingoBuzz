@@ -51,6 +51,8 @@ const libraryState = {
   installPromptEvent: null,
   isStandalone: false,
   canShare: false,
+  swUpdateAvailable: false,
+  swRegistration: null,
 };
 let previewAudio = null;
 let longPressTimer = null;
@@ -76,6 +78,32 @@ function updateStandaloneState() {
     (window.navigator.standalone ?? false);
   libraryState.isStandalone = isStandalone;
   libraryState.canShare = typeof navigator.share === "function";
+}
+
+function bindServiceWorkerEvents(registration) {
+  libraryState.swRegistration = registration;
+  if (registration.waiting) {
+    libraryState.swUpdateAvailable = true;
+    renderLibraryList();
+  }
+  registration.addEventListener("updatefound", () => {
+    const newWorker = registration.installing;
+    if (!newWorker) {
+      return;
+    }
+    newWorker.addEventListener("statechange", () => {
+      if (
+        newWorker.state === "installed" &&
+        navigator.serviceWorker.controller
+      ) {
+        libraryState.swUpdateAvailable = true;
+        renderLibraryList();
+      }
+    });
+  });
+  window.setInterval(() => {
+    registration.update().catch(() => {});
+  }, 60 * 60 * 1000);
 }
 
 function clearLongPressTimer() {
@@ -442,11 +470,22 @@ function renderLibraryList() {
     elements.libraryList.append(emptyState);
   }
   const needsInstallButton = Boolean(libraryState.installPromptEvent);
-  const canShowShareButton =
-    libraryState.isStandalone && (libraryState.canShare || navigator.clipboard);
+  const shouldShowUpdateBanner = libraryState.swUpdateAvailable;
+  const shareLabel = libraryState.canShare
+    ? "Del BingoBuzz"
+    : "Kopier lenke til BingoBuzz";
 
   if (elements.libraryList.childNodes.length) {
-    if (needsInstallButton) {
+    if (shouldShowUpdateBanner) {
+      const updateBtn = document.createElement("button");
+      updateBtn.className = "library-cta-button";
+      updateBtn.type = "button";
+      updateBtn.textContent = "Ny versjon · Start på nytt";
+      updateBtn.addEventListener("click", () => {
+        void activatePendingUpdate();
+      });
+      elements.libraryList.append(updateBtn);
+    } else if (needsInstallButton) {
       const installBtn = document.createElement("button");
       installBtn.className = "library-cta-button";
       installBtn.type = "button";
@@ -455,16 +494,16 @@ function renderLibraryList() {
         void promptInstall();
       });
       elements.libraryList.append(installBtn);
-    } else if (canShowShareButton) {
-      const shareBtn = document.createElement("button");
-      shareBtn.className = "library-cta-button";
-      shareBtn.type = "button";
-      shareBtn.textContent = "Del BingoBuzz";
-      shareBtn.addEventListener("click", () => {
-        void handleShare();
-      });
-      elements.libraryList.append(shareBtn);
     }
+
+    const shareBtn = document.createElement("button");
+    shareBtn.className = "library-cta-button";
+    shareBtn.type = "button";
+    shareBtn.textContent = shareLabel;
+    shareBtn.addEventListener("click", () => {
+      void handleShare();
+    });
+    elements.libraryList.append(shareBtn);
   }
   if (elements.regenButton) {
     elements.regenButton.disabled = files.length === 0;
@@ -1062,7 +1101,17 @@ if (typeof window !== "undefined") {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("./sw.js", { scope: "./" })
+      .then((registration) => {
+        bindServiceWorkerEvents(registration);
+      })
       .catch((error) => console.warn("SW registration failed", error));
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (swRefreshPlanned) {
+        swRefreshPlanned = false;
+        window.location.reload();
+      }
+    });
   }
 
   window.addEventListener("beforeinstallprompt", (event) => {
@@ -1277,4 +1326,12 @@ async function handleShare() {
     }
   }
   setLibraryStatus("Deling ikke støttet her – kopier URL manuelt.");
+}
+
+function activatePendingUpdate() {
+  const waiting = libraryState.swRegistration?.waiting;
+  if (waiting) {
+    swRefreshPlanned = true;
+    waiting.postMessage({ type: "SKIP_WAITING" });
+  }
 }
