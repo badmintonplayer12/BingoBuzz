@@ -39,6 +39,7 @@ const LONG_PRESS_DELAY_MS = 600;
 const audioEngine = createAudioEngine();
 const playlist = createPlaylist();
 const storage = createStorage({ ttl: SESSION_TTL_MS });
+let swRefreshPlanned = false;
 let manifestRef = null;
 let sessionRef = null;
 const disposables = [];
