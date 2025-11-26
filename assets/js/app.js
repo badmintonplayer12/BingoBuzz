@@ -35,6 +35,8 @@ elements.libraryPanel?.setAttribute("tabindex", "-1");
 const focusableSelectors =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const LONG_PRESS_DELAY_MS = 600;
+const ACTION_COOLDOWN_MS = 150;
+const CLICK_GUARD_MS = 350;
 
 const audioEngine = createAudioEngine();
 const playlist = createPlaylist();
@@ -63,6 +65,9 @@ let favoritesPersistenceAvailable = true;
 let prefsPersistenceAvailable = true;
 let regenerateInFlight = false;
 let hotspotSeen = false;
+let lastActionTimestamp = 0;
+let ignoreNextClick = false;
+let ignoreClickResetTimer = null;
 
 function humanizeClipId(id) {
   return typeof id === "string" ? id.replace(/_/g, " ") : "";
@@ -900,6 +905,18 @@ async function playNext() {
   await playClipResult(nextResult);
 }
 
+function maybeTriggerAction() {
+  const now =
+    typeof performance !== "undefined" && typeof performance.now === "function"
+      ? performance.now()
+      : Date.now();
+  if (now - lastActionTimestamp < ACTION_COOLDOWN_MS) {
+    return;
+  }
+  lastActionTimestamp = now;
+  void handleActionClick();
+}
+
 async function handleActionClick() {
   stopPreviewPlayback();
   if (audioEngine.state === "playing") {
@@ -957,9 +974,42 @@ async function handleActionClick() {
 function bindUi() {
   disposables.push(audioEngine.on("ended", handlePlaybackEnded));
 
-  elements.actionButton?.addEventListener("click", () => {
-    void handleActionClick();
-  });
+  if (elements.actionButton) {
+    const hasPointerEvents =
+      typeof window !== "undefined" && "PointerEvent" in window;
+    const setClickGuard = () => {
+      ignoreNextClick = true;
+      if (ignoreClickResetTimer) {
+        clearTimeout(ignoreClickResetTimer);
+      }
+      ignoreClickResetTimer = setTimeout(() => {
+        ignoreNextClick = false;
+        ignoreClickResetTimer = null;
+      }, CLICK_GUARD_MS);
+    };
+
+    if (hasPointerEvents) {
+      elements.actionButton.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) {
+          return;
+        }
+        setClickGuard();
+        maybeTriggerAction();
+      });
+    }
+
+    elements.actionButton.addEventListener("click", () => {
+      if (hasPointerEvents && ignoreNextClick) {
+        ignoreNextClick = false;
+        if (ignoreClickResetTimer) {
+          clearTimeout(ignoreClickResetTimer);
+          ignoreClickResetTimer = null;
+        }
+        return;
+      }
+      maybeTriggerAction();
+    });
+  }
   elements.resetBtn?.addEventListener("click", () => {
     resetSession();
   });
