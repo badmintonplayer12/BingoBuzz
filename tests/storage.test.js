@@ -58,12 +58,21 @@ describe("storage favorites & prefs", () => {
 
   it("saves and loads prefs", () => {
     const storage = createStorage({ ttl: null });
-    const saveResult = storage.savePrefs({ filterFavoritesOnly: true });
+    const saveResult = storage.savePrefs({ filterFavoritesOnly: true, autoFadeSeconds: 15 });
     expect(saveResult).toBe(true);
 
     const { prefs, persistent } = storage.loadPrefs();
     expect(persistent).toBe(true);
     expect(prefs.filterFavoritesOnly).toBe(true);
+    expect(prefs.autoFadeSeconds).toBe(15);
+  });
+
+  it("clamps autoFadeSeconds when saving/loading prefs", () => {
+    const storage = createStorage({ ttl: null });
+    storage.savePrefs({ filterFavoritesOnly: false, autoFadeSeconds: 999 });
+    const { prefs } = storage.loadPrefs();
+    expect(prefs.autoFadeSeconds).toBeLessThanOrEqual(120);
+    expect(prefs.autoFadeSeconds).toBeGreaterThanOrEqual(0);
   });
 
   it("reports persistent=false when localStorage is unavailable", () => {

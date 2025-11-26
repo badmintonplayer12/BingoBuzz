@@ -58,6 +58,17 @@
             <button id="library-close" type="button" class="close-button" aria-label="Lukk bibliotek">×</button>
           </div>
         </header>
+        <div class="library-pref" aria-live="polite">
+          <label for="auto-fade-select">Auto-fade</label>
+          <select id="auto-fade-select">
+            <option value="0">Av (0s)</option>
+            <option value="5">5 sekunder</option>
+            <option value="10">10 sekunder</option>
+            <option value="15">15 sekunder</option>
+            <option value="30">30 sekunder</option>
+          </select>
+          <p class="library-pref__hint">Stopper klippet automatisk etter valgt tid.</p>
+        </div>
         <p class="library-status" id="library-status" aria-live="polite"></p>
         <div class="library-list" id="library-list" role="region" aria-labelledby="library-title"></div>
       </div>

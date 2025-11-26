@@ -131,7 +131,15 @@
 - **Debug**
   - `window.bingoBuzzDebug.regenByFavorites()` trigger samme logikk for test.
 
-## 8. Future Enhancements (Backlog)
+## 8. Auto-fade etter N sekunder (bibliotek-valg)
+- **Mål**: Bruker kan velge at klipp auto-fades etter X sekunder (for lange klipp), default av (0).
+- **UI**: Dropdown i bibliotek-panelet: `Av (0)`, `5s`, `10s`, `15s`, `30s` (mobilvennlig). Kort hinttekst: “Stopper klippet automatisk etter valgt tid.”
+- **Lagring**: Utvid `bbz:v1:prefs` (`storage.js`) med `autoFadeSeconds` (default 0, clamp f.eks. 0–120s). Persistér på endring; vis status hvis persistence blokkeres (privatmodus).
+- **State**: Legg felt i `libraryState` i `app.js`, hydrér fra `storage.loadPrefs()`, oppdater dropdown ved oppstart, lagre ved endring.
+- **Avspilling**: Når `playClipResult` starter et klipp og `autoFadeSeconds > 0`: sett timeout; hvis samme klipp fortsatt spiller etter N sek → kall `audioEngine.fadeOut(STOP_FADE_MS)` og oppdater UI til fading/idle. Clear timer ved manuell fade, playback end, reset, feil/skip, ny play.
+- **Edge/QA**: Ingen nye audio/playlist-tilstander; timer skal ikke trigge hvis klipp allerede stoppet. Test: lange klipp auto-fader etter valgt tid; kort klipp stopper før timer; manuell fade før timer nuller auto-fade (og ingen ekstra fade etterpå); timer startes på nytt på neste klipp etter skip/feil; prefs survives reload; privatmodus viser varsel.
+
+## 9. Future Enhancements (Backlog)
 - Volume slider and fade-length options persisted via storage.
 - Offline caching with Service Worker and versioned assets.
 - Multi-tab coordination via `BroadcastChannel`.

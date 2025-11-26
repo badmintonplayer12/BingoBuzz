@@ -1,4 +1,10 @@
-import { SESSION_TTL_MS, STOP_FADE_MS } from "./constants.js";
+import {
+  SESSION_TTL_MS,
+  STOP_FADE_MS,
+  AUTO_FADE_DEFAULT_SECONDS,
+  AUTO_FADE_MIN_SECONDS,
+  AUTO_FADE_MAX_SECONDS,
+} from "./constants.js";
 import { createAudioEngine } from "./audio-engine.js";
 import { createPlaylist, buildFavoritesFirstOrder } from "./playlist.js";
 import { createStorage } from "./storage.js";
@@ -24,6 +30,7 @@ const elements = {
   libraryStatus: document.querySelector("#library-status"),
   libraryList: document.querySelector("#library-list"),
   favoritesToggle: document.querySelector("#favorites-toggle"),
+  autoFadeSelect: document.querySelector("#auto-fade-select"),
 };
 
 if (!elements.actionButton || !elements.statusLine) {
@@ -56,6 +63,7 @@ const libraryState = {
   canShare: false,
   swUpdateAvailable: false,
   swRegistration: null,
+  autoFadeSeconds: AUTO_FADE_DEFAULT_SECONDS,
 };
 let previewAudio = null;
 let longPressTimer = null;
@@ -68,6 +76,8 @@ let hotspotSeen = false;
 let lastActionTimestamp = 0;
 let ignoreNextClick = false;
 let ignoreClickResetTimer = null;
+let autoFadeTimer = null;
+let autoFadeClipId = null;
 
 function humanizeClipId(id) {
   return typeof id === "string" ? id.replace(/_/g, " ") : "";
@@ -76,6 +86,17 @@ function humanizeClipId(id) {
 function getDisplayName(file) {
   if (!file) return "";
   return file.display ?? humanizeClipId(file.id);
+}
+
+function normalizeAutoFadeSeconds(value) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) {
+    return AUTO_FADE_DEFAULT_SECONDS;
+  }
+  return Math.min(
+    Math.max(parsed, AUTO_FADE_MIN_SECONDS),
+    AUTO_FADE_MAX_SECONDS,
+  );
 }
 
 function updateStandaloneState() {
@@ -145,6 +166,7 @@ function resetSession() {
   stopPreviewPlayback();
   audioEngine.cancelPrepare?.();
   audioEngine.stopImmediate();
+  clearAutoFadeTimer();
   const snapshot = playlist.reset();
   sessionRef = {
     playlistIds: snapshot.order,
@@ -179,6 +201,7 @@ function prefetchUpcomingClip() {
 }
 
 function handlePlaybackEnded({ reason } = {}) {
+  clearAutoFadeTimer();
   if (reason === "cleanup" || reason === "error") {
     return;
   }
@@ -536,6 +559,7 @@ function persistLibraryPrefs() {
   }
   const success = storage.savePrefs({
     filterFavoritesOnly: Boolean(libraryState.filterFavoritesOnly),
+    autoFadeSeconds: normalizeAutoFadeSeconds(libraryState.autoFadeSeconds),
   });
   if (!success) {
     prefsPersistenceAvailable = false;
@@ -579,15 +603,26 @@ function hydrateFavoritesAndPrefs() {
     prefsPersistenceAvailable = prefsResult?.persistent !== false;
     const nextFilter =
       prefsResult?.prefs?.filterFavoritesOnly ?? libraryState.filterFavoritesOnly;
+    const nextAutoFade =
+      prefsResult?.prefs?.autoFadeSeconds ?? libraryState.autoFadeSeconds;
     libraryState.filterFavoritesOnly = Boolean(nextFilter);
+    libraryState.autoFadeSeconds = normalizeAutoFadeSeconds(nextAutoFade);
     if (elements.favoritesToggle) {
       elements.favoritesToggle.checked = libraryState.filterFavoritesOnly;
+    }
+    if (elements.autoFadeSelect) {
+      elements.autoFadeSelect.value = String(libraryState.autoFadeSeconds);
     }
     if (prefsResult?.persistent === false) {
       setLibraryStatus("Bibliotek-innstillinger lagres ikke (privatmodus aktiv).");
     }
   } else if (elements.favoritesToggle) {
     elements.favoritesToggle.checked = libraryState.filterFavoritesOnly;
+  }
+  if (!elements.autoFadeSelect) {
+    // no-op
+  } else {
+    elements.autoFadeSelect.value = String(libraryState.autoFadeSeconds);
   }
   hotspotSeen = storage.loadHotspotSeen?.() ?? false;
   updateHotspotHighlight();
@@ -638,6 +673,7 @@ async function regeneratePlaylistFromFavorites({ source = "manual" } = {}) {
   }
   regenerateInFlight = true;
   stopPreviewPlayback();
+  clearAutoFadeTimer();
   if (elements.regenButton) {
     elements.regenButton.setAttribute("aria-busy", "true");
     elements.regenButton.disabled = true;
@@ -816,6 +852,34 @@ function updateButtonColor() {
   document.documentElement.style.setProperty("--bg-radial-2-pos", radial2Pos);
 }
 
+function clearAutoFadeTimer() {
+  if (autoFadeTimer) {
+    clearTimeout(autoFadeTimer);
+    autoFadeTimer = null;
+  }
+  autoFadeClipId = null;
+}
+
+function scheduleAutoFade(clip) {
+  clearAutoFadeTimer();
+  const seconds = normalizeAutoFadeSeconds(libraryState.autoFadeSeconds);
+  if (!clip || !seconds || seconds <= 0) {
+    return;
+  }
+  const ms = seconds * 1000;
+  autoFadeClipId = clip.id ?? null;
+  autoFadeTimer = window.setTimeout(() => {
+    autoFadeTimer = null;
+    if (
+      audioEngine.state !== "playing" ||
+      (autoFadeClipId && audioEngine.currentClip?.id !== autoFadeClipId)
+    ) {
+      return;
+    }
+    void performFadeOut({ reason: "auto" });
+  }, ms);
+}
+
 async function playClipResult(result) {
   if (!result || !result.clip) {
     elements.actionButton?.classList.remove("is-playing");
@@ -830,6 +894,7 @@ async function playClipResult(result) {
     return;
   }
   try {
+    clearAutoFadeTimer();
     updateUi({
       statusText: `Spiller #${result.index + 1} av ${result.total} …`,
       actionLabel: "Fade ut",
@@ -841,6 +906,7 @@ async function playClipResult(result) {
     elements.actionButton?.classList.add("is-playing");
 
     await audioEngine.play(result.clip);
+    scheduleAutoFade(result.clip);
     playlist.markSuccess();
     persistSession({ index: playlist.cursor });
     prefetchUpcomingClip();
@@ -869,6 +935,7 @@ async function playClipResult(result) {
     }
 
     const skipResult = playlist.skipFailed(result.clip?.id);
+    clearAutoFadeTimer();
     if (skipResult.clip) {
       persistSession({
         index: playlist.cursor,
@@ -917,36 +984,45 @@ function maybeTriggerAction() {
   void handleActionClick();
 }
 
+async function performFadeOut({ reason = "manual" } = {}) {
+  clearAutoFadeTimer();
+  if (audioEngine.state !== "playing") {
+    return;
+  }
+  elements.actionButton?.classList.remove("is-playing");
+  const statusText = reason === "auto" ? "Auto-fader …" : "Fader ut …";
+  updateUi({
+    statusText,
+    actionLabel: "Fader ut …",
+    actionDisabled: true,
+    actionBusy: true,
+    buttonState: "fading",
+    showReset: false,
+  });
+  elements.actionButton?.style.setProperty("--fade-ms", `${STOP_FADE_MS}ms`);
+  try {
+    await audioEngine.fadeOut(STOP_FADE_MS);
+    elements.actionButton?.classList.add("post-bounce");
+    setTimeout(() => elements.actionButton?.classList.remove("post-bounce"), 420);
+  } catch (error) {
+    console.error("Fade out failed", error);
+    updateUi({
+      statusText: "Fade feilet · prøv igjen",
+      actionLabel: "Start neste",
+      actionDisabled: false,
+      actionBusy: false,
+      buttonState: "idle",
+    });
+  } finally {
+    elements.actionButton?.style.removeProperty("--fade-ms");
+  }
+}
+
 async function handleActionClick() {
   stopPreviewPlayback();
+  clearAutoFadeTimer();
   if (audioEngine.state === "playing") {
-    elements.actionButton?.classList.remove("is-playing");
-    updateUi({
-      statusText: "Fader ut …",
-      actionLabel: "Fader ut …",
-      actionDisabled: true,
-      actionBusy: true,
-      buttonState: "fading",
-      showReset: false,
-    });
-    elements.actionButton?.style.setProperty("--fade-ms", `${STOP_FADE_MS}ms`);
-    try {
-      await audioEngine.fadeOut(STOP_FADE_MS);
-      elements.actionButton?.classList.add("post-bounce");
-      setTimeout(() => elements.actionButton?.classList.remove("post-bounce"), 420);
-      elements.actionButton?.style.removeProperty("--fade-ms");
-    } catch (error) {
-      console.error("Fade out failed", error);
-      updateUi({
-        statusText: "Fade feilet · prøv igjen",
-        actionLabel: "Start neste",
-        actionDisabled: false,
-        actionBusy: false,
-        buttonState: "idle",
-      });
-    } finally {
-      elements.actionButton?.style.removeProperty("--fade-ms");
-    }
+    await performFadeOut({ reason: "manual" });
     return;
   }
 
@@ -1036,6 +1112,19 @@ function bindUi() {
         : "Viser alle spor",
     );
     persistLibraryPrefs();
+  });
+  elements.autoFadeSelect?.addEventListener("change", (event) => {
+    const value = normalizeAutoFadeSeconds(event.target?.value);
+    libraryState.autoFadeSeconds = value;
+    if (elements.autoFadeSelect) {
+      elements.autoFadeSelect.value = String(value);
+    }
+    persistLibraryPrefs();
+    setLibraryStatus(
+      value > 0
+        ? `Auto-fade etter ${value} sekunder.`
+        : "Auto-fade av.",
+    );
   });
   elements.libraryList?.addEventListener("click", (event) => {
     const target = event.target;

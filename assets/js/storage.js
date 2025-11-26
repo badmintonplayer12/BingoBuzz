@@ -2,11 +2,15 @@ import {
   STORAGE_KEYS,
   QUERY_PARAM_FRESH,
   STORAGE_NAMESPACE,
+  AUTO_FADE_DEFAULT_SECONDS,
+  AUTO_FADE_MIN_SECONDS,
+  AUTO_FADE_MAX_SECONDS,
 } from "./constants.js";
 
 const TRUTHY_FRESH_VALUES = new Set(["1", "true", "yes", "fresh"]);
 const DEFAULT_LIBRARY_PREFS = {
   filterFavoritesOnly: false,
+  autoFadeSeconds: AUTO_FADE_DEFAULT_SECONDS,
 };
 
 function getLocalStorage() {
@@ -53,6 +57,17 @@ function normalizeFavoriteIds(ids) {
     normalized.push(trimmed);
   });
   return normalized;
+}
+
+function clampAutoFadeSeconds(value) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) {
+    return AUTO_FADE_DEFAULT_SECONDS;
+  }
+  return Math.min(
+    Math.max(parsed, AUTO_FADE_MIN_SECONDS),
+    AUTO_FADE_MAX_SECONDS,
+  );
 }
 
 function detectFreshFlag() {
@@ -260,6 +275,7 @@ export function createStorage({ ttl }) {
       prefs: {
         ...DEFAULT_LIBRARY_PREFS,
         filterFavoritesOnly: Boolean(parsed.filterFavoritesOnly),
+        autoFadeSeconds: clampAutoFadeSeconds(parsed.autoFadeSeconds),
       },
       persistent: true,
     };
@@ -273,6 +289,7 @@ export function createStorage({ ttl }) {
     const payload = {
       ...DEFAULT_LIBRARY_PREFS,
       filterFavoritesOnly: Boolean(prefs?.filterFavoritesOnly),
+      autoFadeSeconds: clampAutoFadeSeconds(prefs?.autoFadeSeconds),
     };
     try {
       store.setItem(STORAGE_KEYS.prefs, JSON.stringify(payload));
